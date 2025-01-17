@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Codist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Orbitron:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              noto: ['"Noto Sans JP"', "sans-serif"],
+              orbitron: ["Orbitron", "sans-serif"],
+            },
+            colors: {
+              primary: "#F14E34",
+              secondary: "#6D5291",
+              tertiary: "#3D8582",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .contact-gradient {
+        background: linear-gradient(to right, #f14e34, #c92a1d);
+        transition: all 0.3s ease;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+      }
+      .contact-gradient:hover {
+        background: linear-gradient(to right, #c92a1d, #f14e34);
+      }
+      .work-slide {
+        transition: transform 0.5s ease, opacity 0.5s ease;
+        position: absolute;
+        width: 100%;
+      }
+      .work-slide.active {
+        transform: translateX(0);
+        opacity: 1;
+        position: relative;
+      }
+      .work-slide.next {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      .work-slide.prev {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      /* スマートフォン向けのスタイル */
+      @media (max-width: 768px) {
+        .desktop {
+          display: none;
+        }
+        .mobile {
+          display: block;
+        }
+        .mobile-menu {
+          transform: translateX(100%);
+          transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.active {
+          transform: translateX(0);
+        }
+        .menu-button {
+          transition: all 0.3s ease-in-out;
+        }
+        .close-button {
+          transition: transform 0.3s ease-in-out;
+        }
+        .close-button:hover {
+          transform: rotate(90deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen bg-white">
+      <!-- ヘッダー -->
+      <header
+        class="fixed top-0 left-0 right-0 w-full bg-white/95 backdrop-blur-sm z-40"
+      >
+        <!-- メインナビゲーション -->
+        <div class="h-[80px] border-b border-[#d0d0d0]">
+          <div class="container mx-auto h-full px-4">
+            <div class="flex items-center justify-between h-full">
+              <div class="w-[180px]">
+                <!-- ロゴ -->
+                <img
+                  src="../images/header_log.png"
+                  alt="Codist"
+                  class="h-[32px]"
+                />
+              </div>
+
+              <!-- モバイルメニューボタン -->
+              <button class="lg:hidden">
+                <span class="sr-only">メニュー</span>
+                <!-- ハンバーガーメニューアイコン -->
+              </button>
+
+              <!-- ナビゲーション -->
+              <nav class="hidden lg:flex items-center space-x-12">
+                <a
+                  href="./top.html#top"
+                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                  >TOP</a
+                >
+                <a
+                  href="./top.html#service"
+                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                  >SERVICE</a
+                >
+                <a
+                  href="./top.html#work"
+                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                  >WORK</a
+                >
+                <a
+                  href="./top.html#company"
+                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                  >COMPANY</a
+                >
+                <a
+                  href="./member.html"
+                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                  >MEMBER</a
+                >
+                <a
+                  href="./recruit.html"
+                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                  >RECRUIT</a
+                >
+                <a
+                  href="./contact.html"
+                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                  >CONTACT</a
+                >
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- パンくずリスト -->
+        <div class="border-b border-[#d0d0d0]">
+          <div class="container mx-auto px-4">
+            <nav class="py-3" aria-label="Breadcrumb">
+              <ol class="flex items-center space-x-2">
+                <li>
+                  <a href="./top.html" class="text-gray-600 hover:text-primary"
+                    >HOME</a
+                  >
+                </li>
+                <li>
+                  <span class="text-gray-400 mx-2">></span>
+                </li>
+                <li>
+                  <span class="text-gray-900">お問い合わせ</span>
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <!-- ヘッダー -->
+      <header
+        class="fixed top-0 left-0 right-0 w-full bg-white/95 backdrop-blur-sm z-50 transition-transform duration-300 mobile"
+        id="header"
+      >
+        <div class="h-[80px] border-b border-[#d0d0d0]">
+          <div class="container mx-auto h-full px-4">
+            <div class="flex items-center justify-between h-full">
+              <div class="w-[120px]">
+                <img
+                  src="../images/header_log.png"
+                  alt="Codist"
+                  class="h-[24px]"
+                />
+              </div>
+              <button
+                class="menu-button p-2 z-50 relative"
+                id="menu-button"
+                aria-label="メニュー"
+              >
+                <div class="w-6 h-0.5 bg-black mb-1.5 transition-all"></div>
+                <div class="w-6 h-0.5 bg-black mb-1.5 transition-all"></div>
+                <div class="w-6 h-0.5 bg-black transition-all"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- モバイルメニュー -->
+      <nav class="mobile-menu fixed inset-0 bg-primary z-50 mobile">
+        <!-- 閉じるボタン -->
+        <button
+          class="close-button absolute top-6 right-6 p-2 z-50"
+          id="close-button"
+          aria-label="閉じる"
+        >
+          <div
+            class="w-12 h-12 bg-white rounded-full flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-primary"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </div>
+        </button>
+
+        <!-- メニューコンテンツ -->
+        <div class="h-full flex flex-col justify-center px-12">
+          <ul class="space-y-8">
+            <li>
+              <a
+                href="#top"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >TOP</a
+              >
+            </li>
+            <li>
+              <a
+                href="#service"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block relative group"
+              >
+                SERVICE
+                <div
+                  class="absolute -bottom-1 left-0 w-full h-0.5 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
+                ></div>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#work"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >WORK</a
+              >
+            </li>
+            <li>
+              <a
+                href="#company"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >COMPANY</a
+              >
+            </li>
+            <li>
+              <a
+                href="./member.html"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >MEMBER</a
+              >
+            </li>
+            <li>
+              <a
+                href="./recruit.html"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >RECRUIT</a
+              >
+            </li>
+            <li>
+              <a
+                href="./contact.html"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >CONTACT</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main class="pt-[132px]">
+        <div class="border-b border-gray-200 pt-4">
+          <div class="container mx-auto px-4">
+            <div class="flex justify-center items-center gap-4 mb-4">
+              <h2 class="text-4xl lg:text-6xl font-medium font-orbitron">
+                CONTACT
+              </h2>
+              <img
+                src="../images/contact_header.png"
+                alt=""
+                class="w-28 h-28"
+              />
+            </div>
+            <div class="flex justify-center items-center mb-4">
+              <h3 class="text-xl lg:text-2xl font-bold">お問い合わせ</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- お問い合わせセクション -->
+        <section class="pt-24 pb-24 px-4 section desktop">
+          <div class="container mx-auto">
+            <!-- お問い合わせフォーム -->
+            <div class="max-w-4xl mx-auto">
+              <div class="bg-[#3D8582] rounded-lg p-8 lg:p-12 text-white">
+                <div class="text-center mb-12">
+                  <h4 class="text-2xl font-bold mb-4">
+                    まずは御社のお悩みをお気軽にご相談ください
+                  </h4>
+                  <p class="text-white/90 leading-relaxed">
+                    私たちは、お客様の課題やご要望に合わせた最適なシステムをご提供しております。<br />
+                    新規開発から既存システムの改善、運用サポートまで幅広く対応いたします。<br />
+                    ぜひお気軽にお問い合わせください。
+                  </p>
+                </div>
+
+                <form class="space-y-6">
+                  <!-- お問い合わせ種別 -->
+                  <div class="grid grid-cols-[200px_1fr] items-center gap-8">
+                    <label class="flex items-center gap-2 whitespace-nowrap">
+                      お問い合わせ種別
+                      <span
+                        class="bg-[#F14E34] text-white text-xs px-2 py-0.5 rounded"
+                        >必須</span
+                      >
+                    </label>
+                    <div class="flex gap-8">
+                      <label class="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="type"
+                          value="business"
+                          class="text-[#F14E34] focus:ring-[#F14E34]"
+                          checked
+                        />
+                        <span>お仕事のご依頼</span>
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="type"
+                          value="entry"
+                          class="text-[#F14E34] focus:ring-[#F14E34]"
+                        />
+                        <span>エントリー</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- お名前 -->
+                  <div class="grid grid-cols-[200px_1fr] items-center gap-8">
+                    <label class="flex items-center gap-2 whitespace-nowrap">
+                      お名前
+                      <span
+                        class="bg-[#F14E34] text-white text-xs px-2 py-0.5 rounded"
+                        >必須</span
+                      >
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="例）山田 太郎"
+                      class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500"
+                      required
+                    />
+                  </div>
+
+                  <!-- 電話番号 -->
+                  <div class="grid grid-cols-[200px_1fr] items-center gap-8">
+                    <label class="flex items-center gap-2 whitespace-nowrap">
+                      電話番号
+                      <span
+                        class="bg-[#F14E34] text-white text-xs px-2 py-0.5 rounded"
+                        >必須</span
+                      >
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder="例）000-1234-5678"
+                      class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500"
+                      required
+                    />
+                  </div>
+
+                  <!-- メールアドレス -->
+                  <div class="grid grid-cols-[200px_1fr] items-center gap-8">
+                    <label class="flex items-center gap-2 whitespace-nowrap">
+                      メールアドレス
+                      <span
+                        class="bg-[#F14E34] text-white text-xs px-2 py-0.5 rounded"
+                        >必須</span
+                      >
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="例）contact@codist.fun"
+                      class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500"
+                      required
+                    />
+                  </div>
+
+                  <!-- 会社名 -->
+                  <div class="grid grid-cols-[200px_1fr] items-center gap-8">
+                    <label class="flex items-center gap-2 whitespace-nowrap">
+                      会社名
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="例）株式会社Codist"
+                      class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500"
+                    />
+                  </div>
+
+                  <!-- お問い合わせ内容 -->
+                  <div class="grid grid-cols-[200px_1fr] items-start gap-8">
+                    <label
+                      class="flex items-center gap-2 whitespace-nowrap pt-3"
+                    >
+                      お問い合わせ内容
+                      <span
+                        class="bg-[#F14E34] text-white text-xs px-2 py-0.5 rounded"
+                        >必須</span
+                      >
+                    </label>
+                    <textarea
+                      rows="6"
+                      placeholder="お問い合わせ内容をご入力してください"
+                      class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500 resize-none"
+                      required
+                    ></textarea>
+                  </div>
+
+                  <!-- 送信ボタン -->
+                  <div class="text-center pt-8">
+                    <button
+                      type="submit"
+                      class="inline-flex items-center justify-center gap-2 bg-[#F14E34] text-white px-16 py-4 rounded-lg font-bold hover:bg-[#F14E34]/90 transition-colors group"
+                    >
+                      送信する
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="group-hover:translate-x-1 transition-transform"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- お問い合わせセクション -->
+        <section class="pt-24 pb-24 px-4 mobile">
+          <div class="container mx-auto">
+            <div class="max-w-3xl mx-auto">
+              <div class="bg-tertiary text-white rounded-2xl p-8 lg:p-12">
+                <!-- 説明文 -->
+                <div class="text-center mb-12">
+                  <h4 class="text-2xl font-bold mb-6">
+                    まずは御社のお悩みを<br />お気軽にご相談ください
+                  </h4>
+                  <p class="text-white/90 leading-relaxed">
+                    私たちは、お客様の課題やご要望に合わせた最適なシステムをご提供しております。<br />
+                    新規開発から既存システムの改善、運用サポートまで幅広く対応いたします。<br />
+                    ぜひお気軽にお問い合わせください。
+                  </p>
+                </div>
+
+                <!-- フォーム -->
+                <form class="space-y-8">
+                  <!-- お問い合わせ種別 -->
+                  <div class="space-y-4">
+                    <label class="block font-bold">
+                      お問い合わせ種別
+                      <span
+                        class="bg-primary text-white text-xs px-2 py-0.5 rounded ml-2"
+                        >必須</span
+                      >
+                    </label>
+                    <div class="flex gap-8">
+                      <label class="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="type"
+                          value="business"
+                          class="text-primary focus:ring-primary"
+                          checked
+                        />
+                        <span>お仕事のご依頼</span>
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="type"
+                          value="entry"
+                          class="text-primary focus:ring-primary"
+                        />
+                        <span>エントリー</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- お名前 -->
+                  <div class="space-y-4">
+                    <label class="block font-bold">
+                      お名前
+                      <span
+                        class="bg-primary text-white text-xs px-2 py-0.5 rounded ml-2"
+                        >必須</span
+                      >
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="例）山田 太郎"
+                      class="w-full px-4 py-3 rounded-lg bg-white/95 text-gray-900 placeholder-gray-500"
+                      required
+                    />
+                  </div>
+
+                  <!-- 電話番号 -->
+                  <div class="space-y-4">
+                    <label class="block font-bold">
+                      電話番号
+                      <span
+                        class="bg-primary text-white text-xs px-2 py-0.5 rounded ml-2"
+                        >必須</span
+                      >
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder="例）000-1234-5678"
+                      class="w-full px-4 py-3 rounded-lg bg-white/95 text-gray-900 placeholder-gray-500"
+                      required
+                    />
+                  </div>
+
+                  <!-- メールアドレス -->
+                  <div class="space-y-4">
+                    <label class="block font-bold">
+                      メールアドレス
+                      <span
+                        class="bg-primary text-white text-xs px-2 py-0.5 rounded ml-2"
+                        >必須</span
+                      >
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="例）contact@codist.fun"
+                      class="w-full px-4 py-3 rounded-lg bg-white/95 text-gray-900 placeholder-gray-500"
+                      required
+                    />
+                  </div>
+
+                  <!-- お問い合わせ内容 -->
+                  <div class="space-y-4">
+                    <label class="block font-bold">
+                      お問い合わせ内容
+                      <span
+                        class="bg-primary text-white text-xs px-2 py-0.5 rounded ml-2"
+                        >必須</span
+                      >
+                    </label>
+                    <textarea
+                      rows="6"
+                      placeholder="お問い合わせ内容をご入力してください"
+                      class="w-full px-4 py-3 rounded-lg bg-white/95 text-gray-900 placeholder-gray-500 resize-none"
+                      required
+                    ></textarea>
+                  </div>
+
+                  <!-- 送信ボタン -->
+                  <div class="text-center pt-8">
+                    <button
+                      type="submit"
+                      class="inline-flex items-center justify-center gap-2 bg-primary text-white px-16 py-4 rounded-lg font-bold hover:bg-primary/90 transition-colors group"
+                    >
+                      送信する
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="group-hover:translate-x-1 transition-transform"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- コンタクトセクション -->
+      <section
+        class="contact-gradient py-16 lg:py-24 -mb-32 ml-8 relative z-10"
+      >
+        <div class="container mx-auto px-4">
+          <div class="flex flex-col items-end text-right">
+            <h3 class="text-white text-xl lg:text-2xl font-bold font-noto mb-4">
+              ご依頼・お問い合わせはこちら
+            </h3>
+
+            <a href="./contact.html" class="inline-flex items-center group">
+              <span
+                class="text-white text-4xl lg:text-7xl font-medium font-orbitron group-hover:opacity-90 transition-opacity"
+              >
+                Contact us
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="ml-4 group-hover:translate-x-2 transition-transform duration-300"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- 装飾的な背景要素 -->
+        <div
+          class="absolute bottom-0 left-0 w-[200px] h-[200px] bg-white opacity-5 rounded-full"
+        ></div>
+      </section>
+
+      <!-- フッター -->
+      <footer class="bg-[#1A1A1A] pt-40 pb-8 relative">
+        <div class="container mx-auto px-4">
+          <!-- ナビゲーション -->
+          <nav class="flex justify-center mb-16">
+            <ul class="flex flex-wrap justify-center gap-8 lg:gap-12">
+              <li>
+                <a
+                  href="./top.html#top"
+                  class="text-white hover:text-[#F14E34] transition-colors"
+                  >TOP</a
+                >
+              </li>
+              <li>
+                <a
+                  href="./top.html#service"
+                  class="text-white hover:text-[#F14E34] transition-colors"
+                  >SERVICE</a
+                >
+              </li>
+              <li>
+                <a
+                  href="./top.html#work"
+                  class="text-white hover:text-[#F14E34] transition-colors"
+                  >WORK</a
+                >
+              </li>
+              <li>
+                <a
+                  href="./top.html#company"
+                  class="text-white hover:text-[#F14E34] transition-colors"
+                  >COMPANY</a
+                >
+              </li>
+              <li>
+                <a
+                  href="./member.html"
+                  class="text-white hover:text-[#F14E34] transition-colors"
+                  >MEMBER</a
+                >
+              </li>
+              <li>
+                <a
+                  href="./recruit.html"
+                  class="text-white hover:text-[#F14E34] transition-colors"
+                  >RECRUIT</a
+                >
+              </li>
+              <li>
+                <a
+                  href="./contact.html"
+                  class="text-white hover:text-[#F14E34] transition-colors"
+                  >CONTACT</a
+                >
+              </li>
+            </ul>
+          </nav>
+
+          <!-- フッターリンク -->
+          <div class="flex justify-center mb-12">
+            <ul class="flex flex-wrap justify-center gap-8">
+              <li>
+                <a
+                  href="privacy_policy.html"
+                  class="text-sm text-white hover:text-[#F14E34] transition-colors"
+                  >プライバシーポリシー</a
+                >
+              </li>
+              <li>
+                <a
+                  href="./qurlity.html"
+                  class="text-sm text-white hover:text-[#F14E34] transition-colors"
+                  >品質について</a
+                >
+              </li>
+              <li>
+                <a
+                  href="./security.html"
+                  class="text-sm text-white hover:text-[#F14E34] transition-colors"
+                  >情報セキュリティについて</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- ロゴとコピーライト -->
+          <div class="text-center">
+            <div class="mb-6">
+              <img
+                src="../images/footer_log.png"
+                alt="Codist"
+                class="h-12 mx-auto"
+              />
+            </div>
+            <p class="text-sm text-white">&copy; Codist Co., Ltd.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <style>
+      @keyframes spin-slow {
+        from {
+          transform: rotate(45deg);
+        }
+        to {
+          transform: rotate(405deg);
+        }
+      }
+      .animate-spin-slow {
+        animation: spin-slow 20s linear infinite;
+      }
+    </style>
+
+    <script>
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".work-slide");
+      const indicators = document.querySelectorAll(
+        ".flex.justify-center button"
+      );
+
+      function updateSlides() {
+        slides.forEach((slide, index) => {
+          slide.classList.remove("active", "next", "prev");
+          if (index === currentSlide) {
+            slide.classList.add("active");
+          } else if (index > currentSlide) {
+            slide.classList.add("next");
+          } else {
+            slide.classList.add("prev");
+          }
+        });
+
+        // インジケーターの更新
+        indicators.forEach((indicator, index) => {
+          indicator.classList.toggle("bg-white", index === currentSlide);
+          indicator.classList.toggle("bg-white/30", index !== currentSlide);
+        });
+      }
+
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateSlides();
+      }
+
+      function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        updateSlides();
+      }
+
+      function goToSlide(index) {
+        currentSlide = index;
+        updateSlides();
+      }
+
+      // 初期表示
+      updateSlides();
+    </script>
+    <script>
+      const menuButton = document.getElementById("menu-button");
+      const closeButton = document.getElementById("close-button");
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const header = document.getElementById("header");
+      const body = document.body;
+
+      function openMenu() {
+        mobileMenu.classList.add("active");
+        body.classList.add("overflow-hidden");
+        header.style.transform = "translateY(-100%)";
+      }
+
+      function closeMenu() {
+        mobileMenu.classList.remove("active");
+        body.classList.remove("overflow-hidden");
+        header.style.transform = "translateY(0)";
+      }
+
+      menuButton.addEventListener("click", openMenu);
+      closeButton.addEventListener("click", closeMenu);
+
+      // メニューリンクをクリックしたらメニューを閉じる
+      document.querySelectorAll(".mobile-menu a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+    </script>
+  </body>
+</html>
