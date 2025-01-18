@@ -55,6 +55,14 @@
         opacity: 0;
       }
 
+      /* デスクトップ向けの要素を表示 */
+      .desktop {
+        display: block;
+      }
+      .mobile {
+        display: none;
+      }
+
       /* スマートフォン向けのスタイル */
       @media (max-width: 768px) {
         .desktop {
@@ -110,22 +118,22 @@
               <!-- ナビゲーション -->
               <nav class="hidden lg:flex items-center space-x-12">
                 <a
-                  href="./top.html#top"
+                  href="./index.html#top"
                   class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
                   >TOP</a
                 >
                 <a
-                  href="./top.html#service"
+                  href="./index.html#service"
                   class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
                   >SERVICE</a
                 >
                 <a
-                  href="./top.html#work"
+                  href="./index.html#work"
                   class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
                   >WORK</a
                 >
                 <a
-                  href="./top.html#company"
+                  href="./index.html#company"
                   class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
                   >COMPANY</a
                 >
@@ -155,7 +163,9 @@
             <nav class="py-3" aria-label="Breadcrumb">
               <ol class="flex items-center space-x-2">
                 <li>
-                  <a href="./top.html" class="text-gray-600 hover:text-primary"
+                  <a
+                    href="./index.html"
+                    class="text-gray-600 hover:text-primary"
                     >HOME</a
                   >
                 </li>
@@ -234,14 +244,14 @@
           <ul class="space-y-8">
             <li>
               <a
-                href="#top"
+                href="./index.html#top"
                 class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
                 >TOP</a
               >
             </li>
             <li>
               <a
-                href="#service"
+                href="./index.html#service"
                 class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block relative group"
               >
                 SERVICE
@@ -252,14 +262,14 @@
             </li>
             <li>
               <a
-                href="#work"
+                href="./index.html#work"
                 class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
                 >WORK</a
               >
             </li>
             <li>
               <a
-                href="#company"
+                href="./index.html#company"
                 class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
                 >COMPANY</a
               >
@@ -434,28 +444,28 @@
             <ul class="flex flex-wrap justify-center gap-8 lg:gap-12">
               <li>
                 <a
-                  href="./top.html#top"
+                  href="./index.html#top"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >TOP</a
                 >
               </li>
               <li>
                 <a
-                  href="./top.html#service"
+                  href="./index.html#service"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >SERVICE</a
                 >
               </li>
               <li>
                 <a
-                  href="./top.html#work"
+                  href="./index.html#work"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >WORK</a
                 >
               </li>
               <li>
                 <a
-                  href="./top.html#company"
+                  href="./index.html#company"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >COMPANY</a
                 >
@@ -539,51 +549,6 @@
         animation: spin-slow 20s linear infinite;
       }
     </style>
-
-    <script>
-      let currentSlide = 0;
-      const slides = document.querySelectorAll(".work-slide");
-      const indicators = document.querySelectorAll(
-        ".flex.justify-center button"
-      );
-
-      function updateSlides() {
-        slides.forEach((slide, index) => {
-          slide.classList.remove("active", "next", "prev");
-          if (index === currentSlide) {
-            slide.classList.add("active");
-          } else if (index > currentSlide) {
-            slide.classList.add("next");
-          } else {
-            slide.classList.add("prev");
-          }
-        });
-
-        // インジケーターの更新
-        indicators.forEach((indicator, index) => {
-          indicator.classList.toggle("bg-white", index === currentSlide);
-          indicator.classList.toggle("bg-white/30", index !== currentSlide);
-        });
-      }
-
-      function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        updateSlides();
-      }
-
-      function prevSlide() {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        updateSlides();
-      }
-
-      function goToSlide(index) {
-        currentSlide = index;
-        updateSlides();
-      }
-
-      // 初期表示
-      updateSlides();
-    </script>
 
     <script>
       const menuButton = document.getElementById("menu-button");

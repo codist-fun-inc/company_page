@@ -21,10 +21,58 @@
               primary: "#F14E34",
               secondary: "#6D5291",
               tertiary: "#3D8582",
+              teal: "#3D8582",
+              purple: "#6D5291",
+              coral: "#F14E34",
+            },
+            animation: {
+              "fade-in": "fadeIn 0.8s ease-out forwards",
+              "fade-in-delay-1": "fadeIn 0.8s ease-out 0.2s forwards",
+              "fade-in-delay-2": "fadeIn 0.8s ease-out 0.4s forwards",
+              "fade-in-delay-3": "fadeIn 0.8s ease-out 0.6s forwards",
+              "spin-slow": "spin 8s linear infinite",
+              float: "float 3s ease-in-out infinite",
+              "float-delay-1": "float 3s ease-in-out 1s infinite",
+              "float-delay-2": "float 3s ease-in-out 2s infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-20px)" },
+              },
+              spin: {
+                "0%": { transform: "rotate(0deg)" },
+                "100%": { transform: "rotate(360deg)" },
+              },
             },
           },
         },
       };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("animate-fade-in");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.2,
+          }
+        );
+
+        document.querySelectorAll(".scroll-fade").forEach((el) => {
+          el.style.opacity = "0";
+          observer.observe(el);
+        });
+      });
     </script>
     <style>
       .contact-gradient {
@@ -63,8 +111,22 @@
         display: none;
       }
 
+      .fade-out {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 80px; /* ヘッダーの高さ分を確保 */
+      }
+
       /* スマートフォン向けのスタイル */
       @media (max-width: 768px) {
+        html {
+          scroll-padding-top: 60px; /* モバイルヘッダーの高さ分を確保 */
+        }
         .desktop {
           display: none;
         }
@@ -88,6 +150,18 @@
           transform: rotate(90deg);
         }
       }
+
+      @keyframes spin-slow {
+        from {
+          transform: rotate(45deg);
+        }
+        to {
+          transform: rotate(405deg);
+        }
+      }
+      .animate-spin-slow {
+        animation: spin-slow 20s linear infinite;
+      }
     </style>
   </head>
   <body>
@@ -110,22 +184,22 @@
             <!-- ナビゲーション -->
             <nav class="hidden lg:flex items-center space-x-12">
               <a
-                href="./top.html#top"
+                href="./index.html#top"
                 class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
                 >TOP</a
               >
               <a
-                href="./top.html#service"
+                href="./index.html#service"
                 class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
                 >SERVICE</a
               >
               <a
-                href="./top.html#work"
+                href="./index.html#work"
                 class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
                 >WORK</a
               >
               <a
-                href="./top.html#company"
+                href="./index.html#company"
                 class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
                 >COMPANY</a
               >
@@ -212,14 +286,14 @@
           <ul class="space-y-8">
             <li>
               <a
-                href="./top.html#top"
+                href="./index.html#top"
                 class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
                 >TOP</a
               >
             </li>
             <li>
               <a
-                href="./top.html#service"
+                href="./index.html#service"
                 class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block relative group"
               >
                 SERVICE
@@ -230,14 +304,14 @@
             </li>
             <li>
               <a
-                href="./top.html#work"
+                href="./index.html#work"
                 class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
                 >WORK</a
               >
             </li>
             <li>
               <a
-                href="./top.html#company"
+                href="./index.html#company"
                 class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
                 >COMPANY</a
               >
@@ -267,15 +341,16 @@
         </div>
       </nav>
 
-      <!-- フッターサービスセクション -->
+      <!-- PCフッターサービスセクション -->
       <div
+        id="footer-service-desktop"
         class="fixed bottom-0 left-0 right-0 bg-[#1A1A1A] text-white py-3 shadow-lg z-40 bg-opacity-70 desktop"
+        style="transition: opacity 0.3s ease-out, visibility 0.3s ease-out"
       >
+        <!-- PCバージョンのコンテンツ -->
         <div class="container mx-auto px-4">
           <div class="flex items-center justify-between relative">
-            <!-- 左側のコンテンツ -->
             <div class="flex items-center gap-6 flex-1">
-              <!-- イラスト -->
               <div class="relative w-40 hidden md:block">
                 <img
                   src="../images/besiness_men.png"
@@ -283,16 +358,12 @@
                   class="absolute -top-20 w-80 h-auto"
                 />
               </div>
-
-              <!-- 中央の文言 -->
               <div class="flex-1 text-center">
                 <h2 class="text-base md:text-lg font-medium">
                   システムの不安・悩みごとを<br />ヒアリングさせていただきます。
                 </h2>
               </div>
             </div>
-
-            <!-- お問い合わせボタン -->
             <a
               href="./contact.html"
               class="bg-[#F14E34] hover:bg-[#F14E34]/90 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors whitespace-nowrap text-base font-medium"
@@ -317,9 +388,11 @@
         </div>
       </div>
 
-      <!-- フッターサービスセクション -->
+      <!-- モバイルフッターサービスセクション -->
       <div
-        class="fixed bottom-0 left-0 right-0 bg-[#1A1A1A]/90 backdrop-blur-sm text-white py-4 z-40 bg-opacity-70 mobile"
+        id="footer-service-mobile"
+        class="fixed bottom-0 left-0 right-0 bg-[#1A1A1A]/90 backdrop-blur-sm text-white py-4 z-40 mobile"
+        style="transition: opacity 0.3s ease-out, visibility 0.3s ease-out"
       >
         <div class="container mx-auto px-4">
           <div class="flex flex-col items-center text-center space-y-4">
@@ -404,32 +477,32 @@
             <div class="hidden lg:block w-full lg:w-1/2 relative h-[600px]">
               <!-- 大きな円 -->
               <div
-                class="absolute top-0 right-0 w-[280px] h-[280px] bg-[#6d5291] rounded-full opacity-90 animate-pulse"
+                class="absolute top-0 right-0 w-[280px] h-[280px] bg-[#6d5291] rounded-full opacity-0 animate-fade-in"
               ></div>
 
               <!-- 小さな四角形 -->
               <div
-                class="absolute top-[104px] left-[42px] w-16 h-16 bg-[#6d5291] rounded-xl transform rotate-12 animate-bounce"
+                class="absolute top-[104px] left-[42px] w-16 h-16 bg-[#6d5291] rounded-xl transform rotate-12 opacity-0 animate-fade-in-delay-1"
               ></div>
 
               <!-- 枠付き四角形 -->
               <div
-                class="absolute top-[480px] left-0 w-[100px] h-[100px] bg-white rounded-xl border-2 border-[#f14e34] transform -rotate-12"
+                class="absolute top-[480px] left-0 w-[100px] h-[100px] bg-white rounded-xl border-2 border-[#f14e34] transform -rotate-12 opacity-0 animate-fade-in-delay-2"
               ></div>
 
               <!-- 中サイズの円 -->
               <div
-                class="absolute bottom-[80px] right-[60px] w-40 h-40 bg-[#3d8582] rounded-full opacity-80 animate-pulse"
+                class="absolute bottom-[80px] right-[60px] w-40 h-40 bg-[#3d8582] rounded-full opacity-0 animate-fade-in-delay-1"
               ></div>
 
               <!-- 回転する四角形 -->
               <div
-                class="absolute top-[200px] right-[140px] w-28 h-28 bg-[#f14e34] rounded-xl transform rotate-45 animate-spin-slow"
+                class="absolute top-[200px] right-[140px] w-28 h-28 bg-[#f14e34] rounded-xl transform rotate-45 opacity-0 animate-fade-in-delay-2 animate-spin-slow"
               ></div>
 
               <!-- 枠付き円 -->
               <div
-                class="absolute bottom-[240px] left-[100px] w-24 h-24 border-4 border-[#6d5291] rounded-full animate-pulse"
+                class="absolute bottom-[240px] left-[100px] w-24 h-24 border-4 border-[#6d5291] rounded-full opacity-0 animate-fade-in-delay-3"
               ></div>
             </div>
           </div>
@@ -438,13 +511,13 @@
         <!-- 背景の装飾 -->
         <div class="absolute top-0 left-0 w-full h-full -z-10">
           <div
-            class="absolute top-[10%] left-[5%] w-8 h-8 bg-[#f14e34] opacity-20 rounded-full"
+            class="absolute top-[10%] left-[5%] w-8 h-8 bg-[#f14e34] opacity-0 animate-fade-in rounded-full"
           ></div>
           <div
-            class="absolute top-[30%] right-[15%] w-12 h-12 bg-[#6d5291] opacity-20 rounded-xl"
+            class="absolute top-[30%] right-[15%] w-12 h-12 bg-[#6d5291] opacity-0 animate-fade-in-delay-1 rounded-xl"
           ></div>
           <div
-            class="absolute bottom-[20%] left-[20%] w-10 h-10 bg-[#3d8582] opacity-20 rounded-full"
+            class="absolute bottom-[20%] left-[20%] w-10 h-10 bg-[#3d8582] opacity-0 animate-fade-in-delay-2 rounded-full"
           ></div>
         </div>
       </section>
@@ -455,16 +528,16 @@
           <div class="relative z-10">
             <!-- 装飾的な図形 -->
             <div
-              class="absolute top-0 left-0 w-[180px] h-[180px] bg-tertiary rounded-full -z-10 opacity-90"
+              class="absolute -top-32 left-0 w-24 h-24 bg-teal rounded-full -translate-x-1/4"
             ></div>
             <div
-              class="absolute top-[80px] left-[60px] w-12 h-12 border-2 border-secondary rotate-45 -z-10"
+              class="absolute -top-20 right-8 w-8 h-8 rounded-full border-2 border-purple"
             ></div>
             <div
-              class="absolute top-[40px] right-[80px] w-[120px] h-[120px] bg-secondary rounded-full -z-10 opacity-80"
+              class="absolute -top-12 right-20 w-8 h-8 border-2 border-teal"
             ></div>
             <div
-              class="absolute bottom-[60px] right-[40px] w-[100px] h-[100px] bg-primary rounded-lg -z-10 opacity-90"
+              class="absolute -top-20 left-32 w-12 h-12 bg-coral rounded"
             ></div>
 
             <!-- メインコンテンツ -->
@@ -499,6 +572,19 @@
                 </div>
               </div>
             </div>
+            <!-- 下部の図形 -->
+            <div
+              class="absolute top-60 right-0 w-24 h-24 bg-purple rounded-full translate-x-1/4"
+            ></div>
+            <div
+              class="absolute top-64 left-12 w-10 h-10 bg-coral transform rotate-45"
+            ></div>
+            <div
+              class="absolute top-64 right-24 w-8 h-8 border-2 border-teal rounded-full"
+            ></div>
+            <div
+              class="absolute button left-32 w-6 h-6 bg-teal transform rotate-45"
+            ></div>
           </div>
         </div>
       </section>
@@ -506,7 +592,7 @@
       <!-- サービスセクション -->
       <section
         id="service"
-        class="mx-4 lg:mx-12 bg-[#F14E34] py-16 lg:py-24 relative overflow-hidden rounded-[20px] desktop"
+        class="mx-4 lg:mx-12 bg-[#F14E34] py-16 lg:py-24 relative overflow-hidden rounded-[20px] scroll-fade desktop"
       >
         <div class="container mx-auto px-6 lg:px-12 relative z-10">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -626,7 +712,7 @@
       <!-- サービスセクション -->
       <section
         id="service"
-        class="mx-4 lg:mx-12 bg-[#F14E34] py-16 lg:py-24 relative overflow-hidden rounded-[20px] mobile"
+        class="mx-4 lg:mx-12 bg-[#F14E34] py-16 lg:py-24 relative overflow-hidden rounded-[20px] scroll-fade mobile"
       >
         <div class="container mx-auto px-6 lg:px-12 relative z-10">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -743,23 +829,23 @@
       </section>
 
       <!-- メリットセクション -->
-      <section class="py-16 lg:py-24 relative overflow-hidden">
+      <section class="py-16 lg:py-24 relative overflow-hidden scroll-fade">
         <div class="container mx-auto px-4">
           <!-- 装飾的なドット -->
           <div
-            class="absolute top-12 left-8 w-2 h-2 rounded-full bg-[#F14E34]"
+            class="absolute top-12 left-8 w-2 h-2 rounded-full bg-[#F14E34] animate-float"
           ></div>
           <div
-            class="absolute top-24 right-12 w-2 h-2 rounded-full bg-[#6D5291]"
+            class="absolute top-24 right-12 w-2 h-2 rounded-full bg-[#6D5291] animate-float-delay-1"
           ></div>
           <div
-            class="absolute bottom-12 left-1/4 w-2 h-2 rounded-full bg-[#3D8582]"
+            class="absolute bottom-12 left-1/4 w-2 h-2 rounded-full bg-[#3D8582] animate-float-delay-2"
           ></div>
           <div
-            class="absolute top-1/2 right-1/4 w-2 h-2 rounded-full bg-[#F14E34]"
+            class="absolute top-1/2 right-1/4 w-2 h-2 rounded-full bg-[#F14E34] animate-float"
           ></div>
           <div
-            class="absolute bottom-24 right-8 w-2 h-2 rounded-full bg-[#6D5291]"
+            class="absolute bottom-24 right-8 w-2 h-2 rounded-full bg-[#6D5291] animate-float-delay-1"
           ></div>
 
           <div class="text-center mb-16">
@@ -845,170 +931,190 @@
       <!-- 実績紹介スライダー -->
       <section
         id="work"
-        class="bg-[#3D8582] py-16 lg:py-24 rounded-[20px] mx-4 lg:mx-12 mt-12 relative overflow-hidden desktop"
+        class="bg-[#3D8582] py-16 lg:py-24 rounded-[20px] mx-4 lg:mx-12 mt-12 relative overflow-hidden scroll-fade desktop"
       >
         <div class="container mx-auto px-4">
-          <div class="flex flex-col">
-            <!-- タイトル -->
-            <h2
-              class="text-white text-4xl lg:text-6xl font-medium font-orbitron mb-4"
-            >
-              work
-            </h2>
-            <h3 class="text-white text-xl lg:text-2xl font-bold font-noto mb-8">
-              実績紹介
-            </h3>
+          <div class="flex flex-col lg:flex-row lg:gap-12">
+            <!-- タイトル部分 -->
+            <div class="lg:w-1/3 mb-8 lg:mb-0">
+              <h2
+                class="text-white text-4xl lg:text-6xl font-medium font-orbitron mb-4"
+              >
+                work
+              </h2>
+              <h3
+                class="text-white text-xl lg:text-2xl font-bold font-noto mb-8"
+              >
+                実績紹介
+              </h3>
 
-            <p class="text-white text-base lg:text-lg mb-12">
-              これまで手がけてきたプロジェクトの中から、<br />
-              お客様に高く評価いただいた事例をご紹介します。
-            </p>
-
-            <!-- プロジェクトカード -->
-            <div class="relative overflow-hidden">
-              <div id="slide-container" class="relative min-h-[400px] flex">
-                <!-- スライド1 -->
-                <div class="work-slide active desktop">
-                  <div class="bg-white rounded-lg p-6 lg:p-8 mb-8">
-                    <div class="flex flex-wrap gap-4 mb-6">
-                      <span
-                        class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
-                      >
-                        業種：製造業
-                      </span>
-                      <span
-                        class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
-                      >
-                        規模：社員30名程度
-                      </span>
-                    </div>
-
-                    <h4 class="text-xl lg:text-2xl font-bold mb-6">
-                      営業活動を効率化するフルスクラッチ顧客管理システムの開発
-                    </h4>
-
-                    <div class="bg-gray-100 p-6 rounded-lg mb-6">
-                      <div class="flex items-start gap-4">
-                        <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
-                        <p class="text-gray-700">
-                          属人的な営業管理や顧客データの分散管理が課題となっていました。
-                          既存システムが現場に合わなくなったこともあり、業務効率化と顧客情報の一元化をご希望されていました。
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="bg-[#FFEFEF] p-6 rounded-lg">
-                      <div class="flex items-start gap-4">
-                        <h5 class="font-bold min-w-[120px]">対応内容</h5>
-                        <p class="text-gray-700">
-                          まず、現場のヒアリングを通じて課題を整理し、経営層とも連携しながら提案を実施。
-                          営業進捗の可視化や提案書の管理機能など、現場ニーズに即したシステム設計を行いました。
-                          さらに、システム導入後の定着支援として、トレーニングやサポートも実施しました。
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- スライド2 -->
-                <div class="work-slide next desktop">
-                  <div class="bg-white rounded-lg p-6 lg:p-8 mb-8">
-                    <div class="flex flex-wrap gap-4 mb-6">
-                      <span
-                        class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
-                      >
-                        業種：小売業
-                      </span>
-                      <span
-                        class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
-                      >
-                        規模：社員100名程度
-                      </span>
-                    </div>
-
-                    <h4 class="text-xl lg:text-2xl font-bold mb-6">
-                      在庫管理・発注業務の自動化システム構築
-                    </h4>
-
-                    <div class="bg-gray-100 p-6 rounded-lg mb-6">
-                      <div class="flex items-start gap-4">
-                        <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
-                        <p class="text-gray-700">
-                          手作業での在庫確認や発注作業に多くの時間を要し、人的ミスも発生していました。
-                          また、複数店舗の在庫状況をリアルタイムで把握できないことが経営課題となっていました。
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="bg-[#FFEFEF] p-6 rounded-lg">
-                      <div class="flex items-start gap-4">
-                        <h5 class="font-bold min-w-[120px]">対応内容</h5>
-                        <p class="text-gray-700">
-                          在庫数の自動監視と発注提案機能を実装し、さらに店舗間の在庫移動を最適化するアルゴリズムを開発。
-                          また、売上データと連携した需要予測機能により、より効率的な在庫管理を実現しました。
-                          導入後、発注業務の工数を70%削減することに成功しました。
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ナビゲーションボタン -->
-              <div class="flex justify-end gap-4">
-                <button
-                  onclick="prevSlide()"
-                  class="bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D8582]"
-                  aria-label="前のプロジェクト"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="m15 18-6-6 6-6" />
-                  </svg>
-                </button>
-                <button
-                  onclick="nextSlide()"
-                  class="bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D8582]"
-                  aria-label="次のプロジェクト"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
-                </button>
-              </div>
+              <p class="text-white text-base lg:text-lg">
+                これまで手がけてきたプロジェクトの中から、<br
+                  class="hidden lg:block"
+                />
+                お客様に高く評価いただいた事例をご紹介します。
+              </p>
             </div>
 
-            <!-- インジケーター -->
-            <div class="flex justify-center gap-2 mt-6">
-              <button
-                onclick="goToSlide(0)"
-                class="w-2 h-2 rounded-full bg-white transition-opacity"
-                aria-label="プロジェクト 1"
-              ></button>
-              <button
-                onclick="goToSlide(1)"
-                class="w-2 h-2 rounded-full bg-white/30 transition-opacity"
-                aria-label="プロジェクト 2"
-              ></button>
+            <!-- プロジェクトカード部分 -->
+            <div class="lg:w-2/3">
+              <div class="relative overflow-hidden">
+                <div id="slide-container" class="relative min-h-[400px] flex">
+                  <!-- スライド1 -->
+                  <div class="work-slide active w-full desktop">
+                    <div class="bg-white rounded-lg p-6 lg:p-8 mb-8">
+                      <div class="flex flex-wrap gap-4 mb-6">
+                        <span
+                          class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
+                        >
+                          業種：製造業
+                        </span>
+                        <span
+                          class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
+                        >
+                          規模：社員30名程度
+                        </span>
+                      </div>
+
+                      <h4 class="text-xl lg:text-2xl font-bold mb-6">
+                        営業活動を効率化するフルスクラッチ顧客管理システムの開発
+                      </h4>
+
+                      <div class="bg-gray-100 p-6 rounded-lg mb-6">
+                        <div class="flex items-start gap-4">
+                          <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
+                          <p class="text-gray-700">
+                            属人的な営業管理や顧客データの分散管理が課題となっていました。
+                            既存システムが現場に合わなくなったこともあり、業務効率化と顧客情報の一元化をご希望されていました。
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="relative h-6 w-full flex justify-center">
+                        <div
+                          class="absolute w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[12px] border-t-[#F14E34]"
+                        ></div>
+                      </div>
+
+                      <div class="bg-[#FFEFEF] p-6 rounded-lg">
+                        <div class="flex items-start gap-4">
+                          <h5 class="font-bold min-w-[120px]">対応内容</h5>
+                          <p class="text-gray-700">
+                            まず、現場のヒアリングを通じて課題を整理し、経営層とも連携しながら提案を実施。
+                            営業進捗の可視化や提案書の管理機能など、現場ニーズに即したシステム設計を行いました。
+                            さらに、システム導入後の定着支援として、トレーニングやサポートも実施しました。
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- スライド2 -->
+                  <div class="work-slide next w-full desktop">
+                    <div class="bg-white rounded-lg p-6 lg:p-8 mb-8">
+                      <div class="flex flex-wrap gap-4 mb-6">
+                        <span
+                          class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
+                        >
+                          業種：小売業
+                        </span>
+                        <span
+                          class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
+                        >
+                          規模：社員100名程度
+                        </span>
+                      </div>
+
+                      <h4 class="text-xl lg:text-2xl font-bold mb-6">
+                        在庫管理・発注業務の自動化システム構築
+                      </h4>
+
+                      <div class="bg-gray-100 p-6 rounded-lg mb-6">
+                        <div class="flex items-start gap-4">
+                          <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
+                          <p class="text-gray-700">
+                            手作業での在庫確認や発注作業に多くの時間を要し、人的ミスも発生していました。
+                            また、複数店舗の在庫状況をリアルタイムで把握できないことが経営課題となっていました。
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="relative h-6 w-full flex justify-center">
+                        <div
+                          class="absolute w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[12px] border-t-[#F14E34]"
+                        ></div>
+                      </div>
+
+                      <div class="bg-[#FFEFEF] p-6 rounded-lg">
+                        <div class="flex items-start gap-4">
+                          <h5 class="font-bold min-w-[120px]">対応内容</h5>
+                          <p class="text-gray-700">
+                            在庫数の自動監視と発注提案機能を実装し、さらに店舗間の在庫移動を最適化するアルゴリズムを開発。
+                            また、売上データと連携した需要予測機能により、より効率的な在庫管理を実現しました。
+                            導入後、発注業務の工数を70%削減することに成功しました。
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ナビゲーションボタン -->
+                <div class="flex justify-end gap-4">
+                  <button
+                    onclick="prevSlide()"
+                    class="bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D8582]"
+                    aria-label="前のプロジェクト"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m15 18-6-6 6-6" />
+                    </svg>
+                  </button>
+                  <button
+                    onclick="nextSlide()"
+                    class="bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D8582]"
+                    aria-label="次のプロジェクト"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- インジケーター -->
+              <div class="flex justify-center gap-2 mt-6">
+                <button
+                  onclick="goToSlide(0)"
+                  class="w-2 h-2 rounded-full bg-white transition-opacity"
+                  aria-label="プロジェクト 1"
+                ></button>
+                <button
+                  onclick="goToSlide(1)"
+                  class="w-2 h-2 rounded-full bg-white/30 transition-opacity"
+                  aria-label="プロジェクト 2"
+                ></button>
+              </div>
             </div>
           </div>
         </div>
@@ -1023,7 +1129,7 @@
       </section>
 
       <!-- 実績紹介スライダー -->
-      <section class="py-16 px-4 mobile">
+      <section class="py-16 px-4 mobile scroll-fade" id="work">
         <div class="container mx-auto">
           <div class="bg-tertiary rounded-lg p-8 relative max-w-xl mx-auto">
             <!-- タイトル -->
@@ -1137,6 +1243,11 @@
                               属人的な営業管理や顧客データの分散管理が課題となっていました。既存システムが現場に合わなくなってきたことにより、業務効率化と顧客情報の一元化をご希望されていました。
                             </p>
                           </div>
+                          <div class="relative h-6 w-full flex justify-center">
+                            <div
+                              class="absolute w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[12px] border-t-[#F14E34]"
+                            ></div>
+                          </div>
                           <div class="bg-[#FFF5F3] rounded-[16px] p-6">
                             <h4 class="text-gray-900 font-bold mb-4 border-b-2">
                               対応内容
@@ -1211,7 +1322,7 @@
       </section>
 
       <!-- リクルートセクション -->
-      <section class="py-16 lg:py-24 relative overflow-hidden">
+      <section class="py-16 lg:py-24 relative overflow-hidden scroll-fade">
         <div class="container mx-auto px-4">
           <div class="flex flex-col lg:flex-row gap-16">
             <!-- リクルート情報 -->
@@ -1358,35 +1469,35 @@
       </section>
 
       <!-- フッター -->
-      <footer class="bg-[#1A1A1A] pt-40 pb-8 relative">
+      <footer class="bg-[#1A1A1A] pt-40 pb-8 relative" id="footer">
         <div class="container mx-auto px-4">
           <!-- ナビゲーション -->
           <nav class="flex justify-center mb-16">
             <ul class="flex flex-wrap justify-center gap-8 lg:gap-12">
               <li>
                 <a
-                  href="./top.html#top"
+                  href="./index.html#top"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >TOP</a
                 >
               </li>
               <li>
                 <a
-                  href="./top.html#service"
+                  href="./index.html#service"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >SERVICE</a
                 >
               </li>
               <li>
                 <a
-                  href="./top.html#work"
+                  href="./index.html#work"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >WORK</a
                 >
               </li>
               <li>
                 <a
-                  href="./top.html#company"
+                  href="./index.html#company"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >COMPANY</a
                 >
@@ -1456,20 +1567,6 @@
         </div>
       </footer>
     </div>
-
-    <style>
-      @keyframes spin-slow {
-        from {
-          transform: rotate(45deg);
-        }
-        to {
-          transform: rotate(405deg);
-        }
-      }
-      .animate-spin-slow {
-        animation: spin-slow 20s linear infinite;
-      }
-    </style>
 
     <script>
       // デバイスタイプの判定
@@ -1548,26 +1645,102 @@
 
       // スムーズスクロールの実装
       document.addEventListener("DOMContentLoaded", () => {
-        // 同じページ内のリンクにスムーズスクロールを適用
-        document.querySelectorAll(".scroll-link").forEach((anchor) => {
-          anchor.addEventListener("click", function (e) {
+        // スムーズスクロール処理
+        const normalizePath = (path) => {
+          return path.replace(/^\.\//, "").split("/").pop() || "";
+        };
+
+        // デバイスタイプを判定する関数
+        const isMobile = () => {
+          return window.innerWidth <= 768; // モバイルの判定基準を768px以下に設定
+        };
+
+        // スムーズスクロール処理
+        const handleSmoothScroll = (e) => {
+          const target = e.target.closest('a[href*="#"]');
+          if (!target) return;
+
+          const href = target.getAttribute("href");
+          if (!href) return;
+
+          const currentPath = normalizePath(window.location.pathname);
+          const targetPath = normalizePath(href.split("#")[0] || "");
+          const targetHash = "#" + href.split("#")[1];
+
+          if (
+            !targetPath ||
+            targetPath === currentPath ||
+            targetPath === "index.html"
+          ) {
+            // モバイルとデスクトップで適切なセクションを取得
+            const mobile = isMobile();
+            const targetSelector = `${targetHash}${
+              mobile ? ".mobile" : ".desktop"
+            }`;
+            const targetElement =
+              document.querySelector(targetSelector) ||
+              document.querySelector(targetHash);
+
+            if (!targetElement) return;
+
             e.preventDefault();
-            const targetId = this.getAttribute("href");
-            const targetElement = document.querySelector(targetId);
 
-            if (targetElement) {
-              // ヘッダーの高さを考慮したオフセット
-              const headerOffset = 80;
-              const elementPosition = targetElement.getBoundingClientRect().top;
-              const offsetPosition =
-                elementPosition + window.pageYOffset - headerOffset;
+            // ヘッダーの高さを取得
+            const header = document.querySelector("header");
+            const headerHeight = header
+              ? header.offsetHeight
+              : mobile
+              ? 60
+              : 80; // モバイルとデスクトップでデフォルト値を変更
 
-              window.scrollTo({
-                top: offsetPosition,
-                behavior: "smooth",
-              });
-            }
+            // 現在のビューポートでの要素の位置を取得
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition =
+              elementPosition + window.pageYOffset - headerHeight;
+
+            // スムーズスクロールを実行
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth",
+            });
+          }
+        };
+
+        // イベント委譲を使用してすべてのスクロールリンクを処理
+        document.addEventListener("click", handleSmoothScroll);
+
+        // モバイルメニューのトグル処理
+        const toggleMobileMenu = () => {
+          const mobileMenu = document.querySelector(".mobile-menu");
+          if (mobileMenu) {
+            mobileMenu.classList.toggle("open");
+          }
+        };
+
+        // モバイルメニューボタンのイベントリスナー
+        const mobileMenuButton = document.querySelector(".mobile-menu-button");
+        if (mobileMenuButton) {
+          mobileMenuButton.addEventListener("click", toggleMobileMenu);
+        }
+
+        // モバイルメニューリンクをクリックした時の処理
+        const mobileMenuLinks = document.querySelectorAll(
+          '.mobile-menu a[href*="#"]'
+        );
+        mobileMenuLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            handleSmoothScroll(e);
+            toggleMobileMenu();
           });
+        });
+
+        // ウィンドウリサイズ時の処理
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            // リサイズ後にスクロール位置を調整する必要がある場合の処理をここに追加
+          }, 100);
         });
       });
     </script>
@@ -1597,6 +1770,37 @@
       // メニューリンクをクリックしたらメニューを閉じる
       document.querySelectorAll(".mobile-menu a").forEach((link) => {
         link.addEventListener("click", closeMenu);
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const footer = document.getElementById("footer");
+        const footerServiceDesktop = document.getElementById(
+          "footer-service-desktop"
+        );
+        const footerServiceMobile = document.getElementById(
+          "footer-service-mobile"
+        );
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                footerServiceDesktop?.classList.add("fade-out");
+                footerServiceMobile?.classList.add("fade-out");
+              } else {
+                footerServiceDesktop?.classList.remove("fade-out");
+                footerServiceMobile?.classList.remove("fade-out");
+              }
+            });
+          },
+          {
+            threshold: 0.1, // フッターの10%が見えたら発火
+          }
+        );
+
+        if (footer) {
+          observer.observe(footer);
+        }
       });
     </script>
   </body>
