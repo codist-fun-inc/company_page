@@ -50,3 +50,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // URLからtype parameterを取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type');
+
+    if (type === 'work') {
+        // お仕事のご依頼のラジオボタンを探して選択
+        const workRadio = document.querySelector('input[name="entry.230326707"][value="お仕事のご依頼"]');
+        if (workRadio) {
+            workRadio.checked = true;
+        }
+    }
+});
