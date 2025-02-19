@@ -30,3 +30,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // URLからtype parameterを取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type');
+
+    if (type === 'entry') {
+        // デスクトップ版のラジオボタン
+        const desktopEntryRadio = document.querySelector('#contact-form-desktop input[value="エントリー"]');
+        if (desktopEntryRadio) {
+            desktopEntryRadio.checked = true;
+        }
+
+        // モバイル版のラジオボタン
+        const mobileEntryRadio = document.querySelector('#contact-form-mobile input[value="entry"]');
+        if (mobileEntryRadio) {
+            mobileEntryRadio.checked = true;
+        }
+    }
+});
