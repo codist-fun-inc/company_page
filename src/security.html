@@ -3,92 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Codist</title>
+    <title>codist</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Orbitron:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              noto: ['"Noto Sans JP"', "sans-serif"],
-              orbitron: ["Orbitron", "sans-serif"],
-            },
-            colors: {
-              primary: "#F14E34",
-              secondary: "#6D5291",
-              tertiary: "#3D8582",
-            },
-          },
-        },
-      };
-    </script>
-    <style>
-      .contact-gradient {
-        background: linear-gradient(to right, #f14e34, #c92a1d);
-        transition: all 0.3s ease;
-        border-top-left-radius: 20px;
-        border-bottom-left-radius: 20px;
-      }
-      .contact-gradient:hover {
-        background: linear-gradient(to right, #c92a1d, #f14e34);
-      }
-      .work-slide {
-        transition: transform 0.5s ease, opacity 0.5s ease;
-        position: absolute;
-        width: 100%;
-      }
-      .work-slide.active {
-        transform: translateX(0);
-        opacity: 1;
-        position: relative;
-      }
-      .work-slide.next {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      .work-slide.prev {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-
-      /* デスクトップ向けの要素を表示 */
-      .desktop {
-        display: block;
-      }
-      .mobile {
-        display: none;
-      }
-
-      /* スマートフォン向けのスタイル */
-      @media (max-width: 768px) {
-        .desktop {
-          display: none;
-        }
-        .mobile {
-          display: block;
-        }
-        .mobile-menu {
-          transform: translateX(100%);
-          transition: transform 0.3s ease-in-out;
-        }
-        .mobile-menu.active {
-          transform: translateX(0);
-        }
-        .menu-button {
-          transition: all 0.3s ease-in-out;
-        }
-        .close-button {
-          transition: transform 0.3s ease-in-out;
-        }
-        .close-button:hover {
-          transform: rotate(90deg);
-        }
-      }
-    </style>
+    <script src="js/enviroment.js" defer></script>
+    <script src="js/tailwind.js" defer></script>
+    <script src="js/menu.js" defer></script>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <div class="min-h-screen bg-white">
@@ -533,51 +457,10 @@
                 class="h-12 mx-auto"
               />
             </div>
-            <p class="text-sm text-white">&copy; Codist Co., Ltd.</p>
+            <p class="text-sm text-white">&copy; codist Co., Ltd.</p>
           </div>
         </div>
       </footer>
     </div>
-
-    <style>
-      @keyframes spin-slow {
-        from {
-          transform: rotate(45deg);
-        }
-        to {
-          transform: rotate(405deg);
-        }
-      }
-      .animate-spin-slow {
-        animation: spin-slow 20s linear infinite;
-      }
-    </style>
-    <script>
-      const menuButton = document.getElementById("menu-button");
-      const closeButton = document.getElementById("close-button");
-      const mobileMenu = document.querySelector(".mobile-menu");
-      const header = document.getElementById("header");
-      const body = document.body;
-
-      function openMenu() {
-        mobileMenu.classList.add("active");
-        body.classList.add("overflow-hidden");
-        header.style.transform = "translateY(-100%)";
-      }
-
-      function closeMenu() {
-        mobileMenu.classList.remove("active");
-        body.classList.remove("overflow-hidden");
-        header.style.transform = "translateY(0)";
-      }
-
-      menuButton.addEventListener("click", openMenu);
-      closeButton.addEventListener("click", closeMenu);
-
-      // メニューリンクをクリックしたらメニューを閉じる
-      document.querySelectorAll(".mobile-menu a").forEach((link) => {
-        link.addEventListener("click", closeMenu);
-      });
-    </script>
   </body>
 </html>

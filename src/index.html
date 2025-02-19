@@ -3,166 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Codist</title>
+    <title>codist</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Orbitron:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              noto: ['"Noto Sans JP"', "sans-serif"],
-              orbitron: ["Orbitron", "sans-serif"],
-            },
-            colors: {
-              primary: "#F14E34",
-              secondary: "#6D5291",
-              tertiary: "#3D8582",
-              teal: "#3D8582",
-              purple: "#6D5291",
-              coral: "#F14E34",
-            },
-            animation: {
-              "fade-in": "fadeIn 0.8s ease-out forwards",
-              "fade-in-delay-1": "fadeIn 0.8s ease-out 0.2s forwards",
-              "fade-in-delay-2": "fadeIn 0.8s ease-out 0.4s forwards",
-              "fade-in-delay-3": "fadeIn 0.8s ease-out 0.6s forwards",
-              "spin-slow": "spin 8s linear infinite",
-              float: "float 3s ease-in-out infinite",
-              "float-delay-1": "float 3s ease-in-out 1s infinite",
-              "float-delay-2": "float 3s ease-in-out 2s infinite",
-            },
-            keyframes: {
-              fadeIn: {
-                "0%": { opacity: "0", transform: "translateY(20px)" },
-                "100%": { opacity: "1", transform: "translateY(0)" },
-              },
-              float: {
-                "0%, 100%": { transform: "translateY(0)" },
-                "50%": { transform: "translateY(-20px)" },
-              },
-              spin: {
-                "0%": { transform: "rotate(0deg)" },
-                "100%": { transform: "rotate(360deg)" },
-              },
-            },
-          },
-        },
-      };
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("animate-fade-in");
-                observer.unobserve(entry.target);
-              }
-            });
-          },
-          {
-            threshold: 0.2,
-          }
-        );
-
-        document.querySelectorAll(".scroll-fade").forEach((el) => {
-          el.style.opacity = "0";
-          observer.observe(el);
-        });
-      });
-    </script>
-    <style>
-      .contact-gradient {
-        background: linear-gradient(to right, #f14e34, #c92a1d);
-        transition: all 0.3s ease;
-        border-top-left-radius: 20px;
-        border-bottom-left-radius: 20px;
-      }
-      .contact-gradient:hover {
-        background: linear-gradient(to right, #c92a1d, #f14e34);
-      }
-      .work-slide {
-        transition: transform 0.5s ease, opacity 0.5s ease;
-        position: absolute;
-        width: 100%;
-      }
-      .work-slide.active {
-        transform: translateX(0);
-        opacity: 1;
-        position: relative;
-      }
-      .work-slide.next {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      .work-slide.prev {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-
-      /* デスクトップ向けの要素を表示 */
-      .desktop {
-        display: block;
-      }
-      .mobile {
-        display: none;
-      }
-
-      .fade-out {
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
-      }
-
-      html {
-        scroll-behavior: smooth;
-        scroll-padding-top: 80px; /* ヘッダーの高さ分を確保 */
-      }
-
-      /* スマートフォン向けのスタイル */
-      @media (max-width: 768px) {
-        html {
-          scroll-padding-top: 60px; /* モバイルヘッダーの高さ分を確保 */
-        }
-        .desktop {
-          display: none;
-        }
-        .mobile {
-          display: block;
-        }
-        .mobile-menu {
-          transform: translateX(100%);
-          transition: transform 0.3s ease-in-out;
-        }
-        .mobile-menu.active {
-          transform: translateX(0);
-        }
-        .menu-button {
-          transition: all 0.3s ease-in-out;
-        }
-        .close-button {
-          transition: transform 0.3s ease-in-out;
-        }
-        .close-button:hover {
-          transform: rotate(90deg);
-        }
-      }
-
-      @keyframes spin-slow {
-        from {
-          transform: rotate(45deg);
-        }
-        to {
-          transform: rotate(405deg);
-        }
-      }
-      .animate-spin-slow {
-        animation: spin-slow 20s linear infinite;
-      }
-    </style>
+    <script src="js/slider.js" defer></script>
+    <script src="js/enviroment.js" defer></script>
+    <script src="js/tailwind.js" defer></script>
+    <script src="js/menu.js" defer></script>
+    <script src="js/scroll.js" defer></script>
+    <script src="js/footer.js" defer></script>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <div class="min-h-screen bg-white">
@@ -466,43 +319,52 @@
                     <p
                       class="text-white text-xl lg:text-2xl font-bold font-noto whitespace-nowrap"
                     >
-                      精鋭チームがトータルサポート
+                      新進気鋭エンジニアチームがトータルサポート
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- 装飾要素 - アニメーション付き -->
             <div class="hidden lg:block w-full lg:w-1/2 relative h-[600px]">
-              <!-- 大きな円 -->
               <div
-                class="absolute top-0 right-0 w-[280px] h-[280px] bg-[#6d5291] rounded-full opacity-0 animate-fade-in"
+                class="absolute -top-40 right-32 w-48 h-48 bg-[#3d8582] rounded-full animate-fade-in"
+              ></div>
+              <div
+                class="absolute top-0 right-70 w-60 h-60 bg-[#6d5291] rounded-full animate-fade-in"
+              ></div>
+              <div
+                class="absolute bottom-0 left-0 w-40 h-40 bg-[#3d8582] rounded-xl animate-fade-in"
+              ></div>
+              <div
+                class="absolute top-[20%] left-[70%] w-32 h-32 bg-[#f14e34] clip-triangle animate-fade-in"
               ></div>
 
-              <!-- 小さな四角形 -->
               <div
-                class="absolute top-[104px] left-[42px] w-16 h-16 bg-[#6d5291] rounded-xl transform rotate-12 opacity-0 animate-fade-in-delay-1"
+                class="absolute top-[50%] right-[20%] w-24 h-24 border-4 border-[#f14e34] rounded-full animate-fade-in"
+              ></div>
+              <div
+                class="absolute bottom-[35%] left-[10%] w-28 h-28 bg-[#f14e34] clip-triangle animate-fade-in"
+              ></div>
+              <div
+                class="absolute top-[50%] left-[40%] w-20 h-20 bg-[#3d8582] rounded-xl animate-fade-in"
               ></div>
 
-              <!-- 枠付き四角形 -->
               <div
-                class="absolute top-[480px] left-0 w-[100px] h-[100px] bg-white rounded-xl border-2 border-[#f14e34] transform -rotate-12 opacity-0 animate-fade-in-delay-2"
+                class="absolute top-[10%] left-[90%] w-12 h-12 bg-[#f14e34] rounded-full animate-fade-in"
+              ></div>
+              <div
+                class="absolute top-[80%] right-[40%] w-14 h-14 bg-[#6d5291] rounded-xl animate-fade-in"
               ></div>
 
-              <!-- 中サイズの円 -->
               <div
-                class="absolute bottom-[80px] right-[60px] w-40 h-40 bg-[#3d8582] rounded-full opacity-0 animate-fade-in-delay-1"
+                class="absolute top-[30%] right-[40%] w-8 h-8 border-2 border-[#f14e34] rounded-full animate-fade-in"
               ></div>
-
-              <!-- 回転する四角形 -->
               <div
-                class="absolute top-[200px] right-[140px] w-28 h-28 bg-[#f14e34] rounded-xl transform rotate-45 opacity-0 animate-fade-in-delay-2 animate-spin-slow"
+                class="absolute bottom-[20%] right-[10%] w-10 h-10 bg-[#3d8582] clip-triangle animate-fade-in"
               ></div>
-
-              <!-- 枠付き円 -->
               <div
-                class="absolute bottom-[240px] left-[100px] w-24 h-24 border-4 border-[#6d5291] rounded-full opacity-0 animate-fade-in-delay-3"
+                class="absolute top-[70%] left-[50%] w-6 h-6 bg-[#6d5291] rounded-xl animate-fade-in"
               ></div>
             </div>
           </div>
@@ -640,51 +502,51 @@
 
             <!-- 右側：3つの業務説明 -->
             <div class="space-y-6">
-              <!-- 受託開発・SESの業務 -->
+              <!-- 受託開発業務 -->
               <div
                 class="bg-white/95 p-4 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
               >
                 <div class="flex items-start gap-4 mb-6">
                   <div class="w-4 h-4 rounded-full bg-[#F14E34] mt-2"></div>
                   <h4 class="text-[#F14E34] text-xl font-bold font-noto">
-                    受託開発・SESの業務
+                    受託開発業務
                   </h4>
                 </div>
                 <ul class="space-y-4 text-black font-bold">
-                  <li>・社内の業務支援システムの開発</li>
-                  <li>・スマートフォンアプリの開発</li>
+                  <li>・受託開発業務</li>
+                  <li>・既存システムの改修および更新</li>
                 </ul>
               </div>
 
-              <!-- システムの教育業務 -->
+              <!-- システムコンサルティング -->
               <div
                 class="bg-white/95 p-4 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
               >
                 <div class="flex items-start gap-4 mb-6">
                   <div class="w-4 h-4 rounded-full bg-[#6D5291] mt-2"></div>
                   <h4 class="text-[#6D5291] text-xl font-bold font-noto">
-                    システムの教育業務
+                    システムコンサルティング
                   </h4>
                 </div>
                 <ul class="space-y-4 text-black font-bold">
-                  <li>・運用や保守のITリテラシー教育支援</li>
-                  <li>・社員のプログラミング教育支援</li>
+                  <li>・お客様の課題をヒアリングし、課題を解決</li>
+                  <li>・必要なシステムの最適化および構築</li>
                 </ul>
               </div>
 
-              <!-- DX支援業務 -->
+              <!-- アプリ開発 -->
               <div
                 class="bg-white/95 p-8 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
               >
                 <div class="flex items-start gap-4 mb-6">
                   <div class="w-4 h-4 rounded-full bg-[#3D8582] mt-2"></div>
                   <h4 class="text-[#3D8582] text-xl font-bold font-noto">
-                    DX支援業務
+                    アプリ開発
                   </h4>
                 </div>
                 <ul class="space-y-4 text-black font-bold">
-                  <li>・システム運用のスマート化</li>
-                  <li>・必要なシステムの選別・最適化</li>
+                  <li>・スマートフォンアプリの開発</li>
+                  <li>・自社アプリの開発</li>
                 </ul>
               </div>
             </div>
@@ -760,51 +622,51 @@
 
             <!-- 右側：3つの業務説明 -->
             <div class="space-y-6">
-              <!-- 受託開発・SESの業務 -->
+              <!-- 受託開発業務 -->
               <div
                 class="bg-white/95 p-4 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
               >
                 <div class="flex items-start gap-4 mb-6">
                   <div class="w-4 h-4 rounded-full bg-[#F14E34] mt-2"></div>
                   <h4 class="text-[#F14E34] text-xl font-bold font-noto">
-                    受託開発・SESの業務
+                    受託開発業務
                   </h4>
                 </div>
                 <ul class="space-y-4 text-black font-bold">
-                  <li>・社内の業務支援システムの開発</li>
-                  <li>・スマートフォンアプリの開発</li>
+                  <li>・受託開発業務</li>
+                  <li>・既存システムの改修および更新</li>
                 </ul>
               </div>
 
-              <!-- システムの教育業務 -->
+              <!-- システムコンサルティング -->
               <div
                 class="bg-white/95 p-4 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
               >
                 <div class="flex items-start gap-4 mb-6">
                   <div class="w-4 h-4 rounded-full bg-[#6D5291] mt-2"></div>
                   <h4 class="text-[#6D5291] text-xl font-bold font-noto">
-                    システムの教育業務
+                    システムコンサルティング
                   </h4>
                 </div>
                 <ul class="space-y-4 text-black font-bold">
-                  <li>・運用や保守のITリテラシー教育支援</li>
-                  <li>・社員のプログラミング教育支援</li>
+                  <li>・お客様の課題をヒアリングし、課題を解決</li>
+                  <li>・必要なシステムの最適化および構築</li>
                 </ul>
               </div>
 
-              <!-- DX支援業務 -->
+              <!-- アプリ開発 -->
               <div
                 class="bg-white/95 p-8 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
               >
                 <div class="flex items-start gap-4 mb-6">
                   <div class="w-4 h-4 rounded-full bg-[#3D8582] mt-2"></div>
                   <h4 class="text-[#3D8582] text-xl font-bold font-noto">
-                    DX支援業務
+                    アプリ開発
                   </h4>
                 </div>
                 <ul class="space-y-4 text-black font-bold">
-                  <li>・システム運用のスマート化</li>
-                  <li>・必要なシステムの選別・最適化</li>
+                  <li>・スマートフォンアプリの開発</li>
+                  <li>・自社アプリの開発</li>
                 </ul>
               </div>
 
@@ -833,19 +695,46 @@
         <div class="container mx-auto px-4">
           <!-- 装飾的なドット -->
           <div
-            class="absolute top-12 left-8 w-2 h-2 rounded-full bg-[#F14E34] animate-float"
+            class="absolute top-16 left-8 w-2 h-2 rounded-full bg-[#F14E34] animate-float"
           ></div>
           <div
-            class="absolute top-24 right-12 w-2 h-2 rounded-full bg-[#6D5291] animate-float-delay-1"
+            class="absolute top-28 right-1/3 w-2 h-2 rounded-full bg-[#FFFF00] animate-float"
+          ></div>
+          <div
+            class="absolute top-24 right-40 w-2 h-2 rounded-full bg-[#6D5291] animate-float-delay-1"
           ></div>
           <div
             class="absolute bottom-12 left-1/4 w-2 h-2 rounded-full bg-[#3D8582] animate-float-delay-2"
           ></div>
           <div
-            class="absolute top-1/2 right-1/4 w-2 h-2 rounded-full bg-[#F14E34] animate-float"
+            class="absolute bottom-4 left-1/2 w-2 h-2 rounded-full bg-[#F14E34] animate-float-delay-2"
+          ></div>
+          <div
+            class="absolute bottom-12 right-1/4 w-2 h-2 rounded-full bg-[#FFFF00] animate-float-delay-2"
+          ></div>
+          <div
+            class="absolute top-1/3 right-1/4 w-2 h-2 rounded-full bg-[#F14E34] animate-float"
           ></div>
           <div
             class="absolute bottom-24 right-8 w-2 h-2 rounded-full bg-[#6D5291] animate-float-delay-1"
+          ></div>
+          <div
+            class="absolute top-36 left-1/4 w-2 h-2 rounded-full bg-[#3D8582] animate-float-delay-2"
+          ></div>
+          <div
+            class="absolute top-72 left-1/3 w-2 h-2 rounded-full bg-[#FFFF00] animate-float-delay-2"
+          ></div>
+          <div
+            class="absolute bottom-36 right-1/3 w-2 h-2 rounded-full bg-[#F14E34] animate-float"
+          ></div>
+          <div
+            class="absolute top-1/4 right-1/5 w-2 h-2 rounded-full bg-[#6D5291] animate-float-delay-1"
+          ></div>
+          <div
+            class="absolute bottom-1/4 left-1/5 w-2 h-2 rounded-full bg-[#6D5291] animate-float-delay-2"
+          ></div>
+          <div
+            class="absolute top-1/2 right-16 w-2 h-2 rounded-full bg-[#FFFF00] animate-float"
           ></div>
 
           <div class="text-center mb-16">
@@ -853,7 +742,7 @@
               merit
             </h2>
             <h3 class="text-xl lg:text-2xl font-bold font-noto">
-              Codistに依頼するメリット
+              codistに依頼するメリット
             </h3>
           </div>
 
@@ -875,7 +764,7 @@
               </div>
               <p class="text-sm font-noto leading-relaxed">
                 対話を通してお客様の想いや課題を深く理解し、<br />
-                本当に必要な機能や設計をご提案しています。
+                本当に必要な機能や設計を提案いたします。
               </p>
             </div>
 
@@ -921,7 +810,7 @@
               </div>
               <p class="text-sm font-noto leading-relaxed">
                 お客様の思いや考えを言語化し、<br />
-                具体的なシステムの形を積極的に提案させていただきます。
+                具体的なシステムの形を積極的に提案いたします。
               </p>
             </div>
           </div>
@@ -967,25 +856,25 @@
                         <span
                           class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
                         >
-                          業種：製造業
+                          業種：教育業
                         </span>
                         <span
                           class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
                         >
-                          規模：社員30名程度
+                          規模：社員10名程度
                         </span>
                       </div>
 
                       <h4 class="text-xl lg:text-2xl font-bold mb-6">
-                        営業活動を効率化するフルスクラッチ顧客管理システムの開発
+                        生徒とのスケジュール管理システムの開発
                       </h4>
 
                       <div class="bg-gray-100 p-6 rounded-lg mb-6">
                         <div class="flex items-start gap-4">
                           <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
                           <p class="text-gray-700">
-                            属人的な営業管理や顧客データの分散管理が課題となっていました。
-                            既存システムが現場に合わなくなったこともあり、業務効率化と顧客情報の一元化をご希望されていました。
+                            生徒との予定調整を電話やメールで行っており、時間と手間がかかっている状況。
+                            リアルタイムでのスケジュール調整と顧客情報の一元管理が求められていました。
                           </p>
                         </div>
                       </div>
@@ -1000,9 +889,9 @@
                         <div class="flex items-start gap-4">
                           <h5 class="font-bold min-w-[120px]">対応内容</h5>
                           <p class="text-gray-700">
-                            まず、現場のヒアリングを通じて課題を整理し、経営層とも連携しながら提案を実施。
-                            営業進捗の可視化や提案書の管理機能など、現場ニーズに即したシステム設計を行いました。
-                            さらに、システム導入後の定着支援として、トレーニングやサポートも実施しました。
+                            現場でのヒアリングを通じて課題を整理し、予定調整と顧客管理を一元化できるシステムを開発。<br />
+                            さらに、利便性向上のため決済機能を追加実装しました。<br />
+                            これにより、生徒との予定調整がスムーズになり、業務効率化と顧客拡大を実現しました。
                           </p>
                         </div>
                       </div>
@@ -1016,25 +905,25 @@
                         <span
                           class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
                         >
-                          業種：小売業
+                          業種：不動産業
                         </span>
                         <span
                           class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
                         >
-                          規模：社員100名程度
+                          規模：社員10名程度
                         </span>
                       </div>
 
                       <h4 class="text-xl lg:text-2xl font-bold mb-6">
-                        在庫管理・発注業務の自動化システム構築
+                        不動産物件管理アプリ開発のコンサルティング
                       </h4>
 
                       <div class="bg-gray-100 p-6 rounded-lg mb-6">
                         <div class="flex items-start gap-4">
                           <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
                           <p class="text-gray-700">
-                            手作業での在庫確認や発注作業に多くの時間を要し、人的ミスも発生していました。
-                            また、複数店舗の在庫状況をリアルタイムで把握できないことが経営課題となっていました。
+                            自社の不動産物件情報を効率的に管理するため、新規アプリケーション開発を計画。
+                            しかし、技術的な知識がなく、開発会社の選定にも苦労されておりました。
                           </p>
                         </div>
                       </div>
@@ -1049,9 +938,11 @@
                         <div class="flex items-start gap-4">
                           <h5 class="font-bold min-w-[120px]">対応内容</h5>
                           <p class="text-gray-700">
-                            在庫数の自動監視と発注提案機能を実装し、さらに店舗間の在庫移動を最適化するアルゴリズムを開発。
-                            また、売上データと連携した需要予測機能により、より効率的な在庫管理を実現しました。
-                            導入後、発注業務の工数を70%削減することに成功しました。
+                            お客様の要件に基づき、適切なプログラミング言語の選定を支援。<br />
+                            また、アプリケーションの稼働インフラに関する技術的助言しました。<br />
+                            さらに、開発をスムーズに進めるための検討ポイント整理し、要件に応じた適正費用を算出した。<br />
+                            結果として、お客様のニーズに合った開発パートナーの選定を実現しました。
+
                           </p>
                         </div>
                       </div>
@@ -1159,7 +1050,7 @@
                               業種
                             </div>
                             <span class="text-[#3D8582] text-sm"
-                              >業種が入ります</span
+                              >教育業</span
                             >
                           </div>
                           <div class="inline-flex items-center gap-2">
@@ -1169,12 +1060,12 @@
                               規模
                             </div>
                             <span class="text-[#3D8582] text-sm"
-                              >社員30名程度</span
+                              >社員10名程度</span
                             >
                           </div>
                         </div>
                         <h5 class="font-bold text-sm my-4">
-                          営業活動を効率化するフルスクラッチ顧客管理システムの開発
+                          生徒とのスケジュール管理システムの開発
                         </h5>
                         <div class="space-y-8">
                           <div class="bg-gray-50 rounded-[16px] p-6">
@@ -1182,7 +1073,8 @@
                               お客様の状況
                             </h4>
                             <p class="text-gray-700 leading-relaxed">
-                              属人的な営業管理や顧客データの分散管理が課題となっていました。既存システムが現場に合わなくなってきたことにより、業務効率化と顧客情報の一元化をご希望されていました。
+                              生徒との予定調整を電話やメールで行っており、時間と手間がかかっている状況。
+                              リアルタイムでのスケジュール調整と顧客情報の一元管理が求められていました。
                             </p>
                           </div>
                           <div class="relative h-6 w-full flex justify-center">
@@ -1195,7 +1087,9 @@
                               対応内容
                             </h4>
                             <p class="text-gray-700 leading-relaxed">
-                              まず、現場のヒアリングを通して課題を整理し、経営層とも連携しながら提案を実施。営業進捗の可視化や提案書の管理機能など、現場ニーズに即したシステム設計を行いました。さらに、システム導入後の定着支援として、トレーニングやサポートも実施しました。
+                              現場でのヒアリングを通じて課題を整理し、予定調整と顧客管理を一元化できるシステムを開発。
+                              さらに、利便性向上のため決済機能を追加実装しました。
+                              これにより、生徒との予定調整がスムーズになり、業務効率化と顧客拡大を実現しました。
                             </p>
                           </div>
                         </div>
@@ -1217,7 +1111,7 @@
                               業種
                             </div>
                             <span class="text-[#3D8582] text-sm"
-                              >業種が入ります</span
+                              >不動産業</span
                             >
                           </div>
                           <div class="inline-flex items-center gap-2">
@@ -1227,12 +1121,12 @@
                               規模
                             </div>
                             <span class="text-[#3D8582] text-sm"
-                              >社員30名程度</span
+                              >社員10名程度</span
                             >
                           </div>
                         </div>
                         <h5 class="font-bold text-sm my-4">
-                          営業活動を効率化するフルスクラッチ顧客管理システムの開発
+                          不動産物件管理アプリ開発のコンサルティング
                         </h5>
                         <div class="space-y-8">
                           <div class="bg-gray-50 rounded-[16px] p-6">
@@ -1240,7 +1134,8 @@
                               お客様の状況
                             </h4>
                             <p class="text-gray-700 leading-relaxed">
-                              属人的な営業管理や顧客データの分散管理が課題となっていました。既存システムが現場に合わなくなってきたことにより、業務効率化と顧客情報の一元化をご希望されていました。
+                              自社の不動産物件情報を効率的に管理するため、新規アプリケーション開発を計画。
+                              しかし、技術的な知識がなく、開発会社の選定にも苦労されておりました。
                             </p>
                           </div>
                           <div class="relative h-6 w-full flex justify-center">
@@ -1253,7 +1148,10 @@
                               対応内容
                             </h4>
                             <p class="text-gray-700 leading-relaxed">
-                              まず、現場のヒアリングを通して課題を整理し、経営層とも連携しながら提案を実施。営業進捗の可視化や提案書の管理機能など、現場ニーズに即したシステム設計を行いました。さらに、システム導入後の定着支援として、トレーニングやサポートも実施しました。
+                              お客様の要件に基づき、適切なプログラミング言語の選定を支援。
+                              また、アプリケーションの稼働インフラに関する技術的助言しました。
+                              さらに、開発をスムーズに進めるための検討ポイント整理し、要件に応じた適正費用を算出した。
+                              結果として、お客様のニーズに合った開発パートナーの選定を実現しました。
                             </p>
                           </div>
                         </div>
@@ -1343,8 +1241,8 @@
                 </div>
 
                 <p class="text-base lg:text-lg mt-8">
-                  Codistでは毎日が「挑戦」と「成長」の連続です。<br />
-                  あなたのやりたいことを全力で応援いたします。
+                  codistでは毎日が「挑戦」と「成長」の連続です。<br />
+                  あなたの挑戦・成長を全力で応援いたします。
                 </p>
                 <div class="text-stert mt-12">
                   <a
@@ -1394,7 +1292,7 @@
                 <div class="border-b border-gray-200 pb-4">
                   <div class="flex items-start">
                     <span class="font-bold min-w-[120px]">所在地</span>
-                    <span>530-0047 大阪府大阪市北区西天満6丁目4番地</span>
+                    <span>530-0002 大阪市北区曽根崎新地１丁目１３番２２号御堂筋フロントタワー</span>
                   </div>
                 </div>
 
@@ -1416,9 +1314,9 @@
                   <div class="flex items-start">
                     <span class="font-bold min-w-[120px]">事業内容</span>
                     <div class="flex flex-col gap-2">
-                      <span>受託開発・SES事業</span>
-                      <span>システム関連教育事業</span>
-                      <span>DX支援・コンサルティング事業</span>
+                      <span>受託開発事業</span>
+                      <span>システムコンサルティング事業</span>
+                      <span>アプリ開発事業</span>
                     </div>
                   </div>
                 </div>
@@ -1562,246 +1460,10 @@
                 class="h-12 mx-auto"
               />
             </div>
-            <p class="text-sm text-white">&copy; Codist Co., Ltd.</p>
+            <p class="text-sm text-white">&copy; codist Co., Ltd.</p>
           </div>
         </div>
       </footer>
     </div>
-
-    <script>
-      // デバイスタイプの判定
-      const isMobile = window.innerWidth < 768;
-
-      let currentSlide = 0;
-      const slides = isMobile
-        ? document.querySelectorAll(".work-slide.mobile")
-        : document.querySelectorAll(".work-slide.desktop");
-      const indicators = document.querySelectorAll(
-        ".flex.justify-center button"
-      );
-
-      function updateSlides() {
-        if (isMobile) {
-          // モバイル用のスライド処理
-          slides.forEach((slide, index) => {
-            slide.classList.remove("active", "next", "prev");
-            if (index === currentSlide) {
-              slide.classList.add("active");
-            } else if (index > currentSlide) {
-              slide.classList.add("next");
-            } else {
-              slide.classList.add("prev");
-            }
-          });
-        } else {
-          // デスクトップ用のスライド処理
-          slides.forEach((slide, index) => {
-            slide.classList.remove("active", "next", "prev");
-            if (index === currentSlide) {
-              slide.classList.add("active");
-              slide.style.transform = "translateX(0)";
-            } else if (index > currentSlide) {
-              slide.classList.add("next");
-              slide.style.transform = "translateX(100%)";
-            } else {
-              slide.classList.add("prev");
-              slide.style.transform = "translateX(-100%)";
-            }
-          });
-        }
-
-        // インジケーターの更新
-        indicators.forEach((indicator, index) => {
-          indicator.classList.toggle("bg-white", index === currentSlide);
-          indicator.classList.toggle("bg-white/30", index !== currentSlide);
-        });
-      }
-
-      function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        updateSlides();
-      }
-
-      function prevSlide() {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        updateSlides();
-      }
-
-      function goToSlide(index) {
-        currentSlide = index;
-        updateSlides();
-      }
-
-      // ウィンドウリサイズ時の処理
-      window.addEventListener("resize", () => {
-        const newIsMobile = window.innerWidth < 768;
-        if (newIsMobile !== isMobile) {
-          location.reload(); // デバイスタイプが変更された場合はページをリロード
-        }
-      });
-
-      // 初期表示
-      updateSlides();
-
-      // スムーズスクロールの実装
-      document.addEventListener("DOMContentLoaded", () => {
-        // スムーズスクロール処理
-        const normalizePath = (path) => {
-          return path.replace(/^\.\//, "").split("/").pop() || "";
-        };
-
-        // デバイスタイプを判定する関数
-        const isMobile = () => {
-          return window.innerWidth <= 768; // モバイルの判定基準を768px以下に設定
-        };
-
-        // スムーズスクロール処理
-        const handleSmoothScroll = (e) => {
-          const target = e.target.closest('a[href*="#"]');
-          if (!target) return;
-
-          const href = target.getAttribute("href");
-          if (!href) return;
-
-          const currentPath = normalizePath(window.location.pathname);
-          const targetPath = normalizePath(href.split("#")[0] || "");
-          const targetHash = "#" + href.split("#")[1];
-
-          if (
-            !targetPath ||
-            targetPath === currentPath ||
-            targetPath === "index.html"
-          ) {
-            // モバイルとデスクトップで適切なセクションを取得
-            const mobile = isMobile();
-            const targetSelector = `${targetHash}${
-              mobile ? ".mobile" : ".desktop"
-            }`;
-            const targetElement =
-              document.querySelector(targetSelector) ||
-              document.querySelector(targetHash);
-
-            if (!targetElement) return;
-
-            e.preventDefault();
-
-            // ヘッダーの高さを取得
-            const header = document.querySelector("header");
-            const headerHeight = header
-              ? header.offsetHeight
-              : mobile
-              ? 60
-              : 80; // モバイルとデスクトップでデフォルト値を変更
-
-            // 現在のビューポートでの要素の位置を取得
-            const elementPosition = targetElement.getBoundingClientRect().top;
-            const offsetPosition =
-              elementPosition + window.pageYOffset - headerHeight;
-
-            // スムーズスクロールを実行
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: "smooth",
-            });
-          }
-        };
-
-        // イベント委譲を使用してすべてのスクロールリンクを処理
-        document.addEventListener("click", handleSmoothScroll);
-
-        // モバイルメニューのトグル処理
-        const toggleMobileMenu = () => {
-          const mobileMenu = document.querySelector(".mobile-menu");
-          if (mobileMenu) {
-            mobileMenu.classList.toggle("open");
-          }
-        };
-
-        // モバイルメニューボタンのイベントリスナー
-        const mobileMenuButton = document.querySelector(".mobile-menu-button");
-        if (mobileMenuButton) {
-          mobileMenuButton.addEventListener("click", toggleMobileMenu);
-        }
-
-        // モバイルメニューリンクをクリックした時の処理
-        const mobileMenuLinks = document.querySelectorAll(
-          '.mobile-menu a[href*="#"]'
-        );
-        mobileMenuLinks.forEach((link) => {
-          link.addEventListener("click", (e) => {
-            handleSmoothScroll(e);
-            toggleMobileMenu();
-          });
-        });
-
-        // ウィンドウリサイズ時の処理
-        let resizeTimer;
-        window.addEventListener("resize", () => {
-          clearTimeout(resizeTimer);
-          resizeTimer = setTimeout(() => {
-            // リサイズ後にスクロール位置を調整する必要がある場合の処理をここに追加
-          }, 100);
-        });
-      });
-    </script>
-
-    <script>
-      const menuButton = document.getElementById("menu-button");
-      const closeButton = document.getElementById("close-button");
-      const mobileMenu = document.querySelector(".mobile-menu");
-      const header = document.getElementById("header");
-      const body = document.body;
-
-      function openMenu() {
-        mobileMenu.classList.add("active");
-        body.classList.add("overflow-hidden");
-        header.style.transform = "translateY(-100%)";
-      }
-
-      function closeMenu() {
-        mobileMenu.classList.remove("active");
-        body.classList.remove("overflow-hidden");
-        header.style.transform = "translateY(0)";
-      }
-
-      menuButton.addEventListener("click", openMenu);
-      closeButton.addEventListener("click", closeMenu);
-
-      // メニューリンクをクリックしたらメニューを閉じる
-      document.querySelectorAll(".mobile-menu a").forEach((link) => {
-        link.addEventListener("click", closeMenu);
-      });
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const footer = document.getElementById("footer");
-        const footerServiceDesktop = document.getElementById(
-          "footer-service-desktop"
-        );
-        const footerServiceMobile = document.getElementById(
-          "footer-service-mobile"
-        );
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                footerServiceDesktop?.classList.add("fade-out");
-                footerServiceMobile?.classList.add("fade-out");
-              } else {
-                footerServiceDesktop?.classList.remove("fade-out");
-                footerServiceMobile?.classList.remove("fade-out");
-              }
-            });
-          },
-          {
-            threshold: 0.1, // フッターの10%が見えたら発火
-          }
-        );
-
-        if (footer) {
-          observer.observe(footer);
-        }
-      });
-    </script>
   </body>
 </html>

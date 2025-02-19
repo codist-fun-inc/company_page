@@ -1,0 +1,73 @@
+.contact-gradient {
+  background: linear-gradient(to right, #f14e34, #c92a1d);
+  transition: all 0.3s ease;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.contact-gradient:hover {
+  background: linear-gradient(to right, #c92a1d, #f14e34);
+}
+.work-slide {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  position: absolute;
+  width: 100%;
+}
+.work-slide.active {
+  transform: translateX(0);
+  opacity: 1;
+  position: relative;
+}
+.work-slide.next {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.work-slide.prev {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* デスクトップ向けの要素を表示 */
+.desktop {
+  display: block;
+}
+.mobile {
+  display: none;
+}
+
+/* スマートフォン向けのスタイル */
+@media (max-width: 768px) {
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: block;
+  }
+  .mobile-menu {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  .mobile-menu.active {
+    transform: translateX(0);
+  }
+  .menu-button {
+    transition: all 0.3s ease-in-out;
+  }
+  .close-button {
+    transition: transform 0.3s ease-in-out;
+  }
+  .close-button:hover {
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(405deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}

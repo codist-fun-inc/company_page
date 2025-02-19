@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Codist</title>
+    <title>codist</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Orbitron:wght@400;500;700&display=swap"
@@ -21,10 +21,58 @@
               primary: "#F14E34",
               secondary: "#6D5291",
               tertiary: "#3D8582",
+              teal: "#3D8582",
+              purple: "#6D5291",
+              coral: "#F14E34",
+            },
+            animation: {
+              "fade-in": "fadeIn 0.8s ease-out forwards",
+              "fade-in-delay-1": "fadeIn 0.8s ease-out 0.2s forwards",
+              "fade-in-delay-2": "fadeIn 0.8s ease-out 0.4s forwards",
+              "fade-in-delay-3": "fadeIn 0.8s ease-out 0.6s forwards",
+              "spin-slow": "spin 8s linear infinite",
+              float: "float 3s ease-in-out infinite",
+              "float-delay-1": "float 3s ease-in-out 1s infinite",
+              "float-delay-2": "float 3s ease-in-out 2s infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-20px)" },
+              },
+              spin: {
+                "0%": { transform: "rotate(0deg)" },
+                "100%": { transform: "rotate(360deg)" },
+              },
             },
           },
         },
       };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("animate-fade-in");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.2,
+          }
+        );
+
+        document.querySelectorAll(".scroll-fade").forEach((el) => {
+          el.style.opacity = "0";
+          observer.observe(el);
+        });
+      });
     </script>
     <style>
       .contact-gradient {
@@ -36,20 +84,83 @@
       .contact-gradient:hover {
         background: linear-gradient(to right, #c92a1d, #f14e34);
       }
+      .work-slide {
+        transition: transform 0.5s ease, opacity 0.5s ease;
+        position: absolute;
+        width: 100%;
+      }
+      .work-slide.active {
+        transform: translateX(0);
+        opacity: 1;
+        position: relative;
+      }
+      .work-slide.next {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      .work-slide.prev {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+
+      /* デスクトップ向けの要素を表示 */
+      .desktop {
+        display: block;
+      }
+      .mobile {
+        display: none;
+      }
+
+      .fade-out {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 80px; /* ヘッダーの高さ分を確保 */
+      }
+
+      /* スマートフォン向けのスタイル */
       @media (max-width: 768px) {
+        html {
+          scroll-padding-top: 60px; /* モバイルヘッダーの高さ分を確保 */
+        }
+        .desktop {
+          display: none;
+        }
+        .mobile {
+          display: block;
+        }
         .mobile-menu {
-          position: fixed;
-          top: 80px;
-          left: 0;
-          right: 0;
-          background: white;
-          padding: 1rem;
-          transform: translateY(-100%);
-          transition: transform 0.3s ease;
+          transform: translateX(100%);
+          transition: transform 0.3s ease-in-out;
         }
         .mobile-menu.active {
-          transform: translateY(0);
+          transform: translateX(0);
         }
+        .menu-button {
+          transition: all 0.3s ease-in-out;
+        }
+        .close-button {
+          transition: transform 0.3s ease-in-out;
+        }
+        .close-button:hover {
+          transform: rotate(90deg);
+        }
+      }
+
+      @keyframes spin-slow {
+        from {
+          transform: rotate(45deg);
+        }
+        to {
+          transform: rotate(405deg);
+        }
+      }
+      .animate-spin-slow {
+        animation: spin-slow 20s linear infinite;
       }
     </style>
   </head>
@@ -57,156 +168,244 @@
     <div class="min-h-screen bg-white">
       <!-- ヘッダー -->
       <header
-        class="fixed top-0 left-0 right-0 w-full bg-white/95 backdrop-blur-sm z-50"
+        class="fixed top-0 left-0 right-0 w-full h-[80px] bg-white/95 backdrop-blur-sm border-b border-[#d0d0d0] z-50 desktop"
+      >
+        <div class="container mx-auto h-full px-4">
+          <div class="flex items-center justify-between h-full">
+            <div class="w-[180px]">
+              <!-- ロゴ -->
+              <img
+                src="../images/header_log.png"
+                alt="Codist"
+                class="h-[32px]"
+              />
+            </div>
+
+            <!-- ナビゲーション -->
+            <nav class="hidden lg:flex items-center space-x-12">
+              <a
+                href="./index.html#top"
+                class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                >TOP</a
+              >
+              <a
+                href="./index.html#service"
+                class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                >SERVICE</a
+              >
+              <a
+                href="./index.html#work"
+                class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                >WORK</a
+              >
+              <a
+                href="./index.html#company"
+                class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                >COMPANY</a
+              >
+              <a
+                href="./member.html"
+                class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                >MEMBER</a
+              >
+              <a
+                href="./recruit.html"
+                class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                >RECRUIT</a
+              >
+              <a
+                href="./contact.html"
+                class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
+                >CONTACT</a
+              >
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <!-- ヘッダー -->
+      <header
+        class="fixed top-0 left-0 right-0 w-full bg-white/95 backdrop-blur-sm z-50 transition-transform duration-300 mobile"
+        id="header"
       >
         <div class="h-[80px] border-b border-[#d0d0d0]">
           <div class="container mx-auto h-full px-4">
             <div class="flex items-center justify-between h-full">
-              <!-- ロゴ -->
-              <div class="w-[120px] sm:w-[180px]">
+              <div class="w-[120px]">
                 <img
                   src="../images/header_log.png"
                   alt="Codist"
-                  class="h-[24px] sm:h-[32px]"
+                  class="h-[24px]"
                 />
               </div>
-
-              <!-- モバイルメニューボタン -->
               <button
-                class="lg:hidden p-2"
-                id="mobile-menu-button"
+                class="menu-button p-2 z-50 relative"
+                id="menu-button"
                 aria-label="メニュー"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <line x1="3" y1="12" x2="21" y2="12"></line>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
+                <div class="w-6 h-0.5 bg-black mb-1.5 transition-all"></div>
+                <div class="w-6 h-0.5 bg-black mb-1.5 transition-all"></div>
+                <div class="w-6 h-0.5 bg-black transition-all"></div>
               </button>
-
-              <!-- デスクトップナビゲーション -->
-              <nav class="hidden lg:flex items-center space-x-8 xl:space-x-12">
-                <a
-                  href="./index.html"
-                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
-                  >TOP</a
-                >
-                <a
-                  href="#service"
-                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
-                  >SERVICE</a
-                >
-                <a
-                  href="#work"
-                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
-                  >WORK</a
-                >
-                <a
-                  href="#company"
-                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
-                  >COMPANY</a
-                >
-                <a
-                  href="./member.html"
-                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
-                  >MEMBER</a
-                >
-                <a
-                  href="./recruit.html"
-                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
-                  >RECRUIT</a
-                >
-                <a
-                  href="./contact.html"
-                  class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300"
-                  >CONTACT</a
-                >
-              </nav>
             </div>
           </div>
         </div>
-
-        <!-- モバイルメニュー -->
-        <div class="mobile-menu lg:hidden" id="mobile-menu">
-          <nav class="flex flex-col space-y-4">
-            <a
-              href="./index.html"
-              class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300 px-4 py-2"
-              >TOP</a
-            >
-            <a
-              href="#service"
-              class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300 px-4 py-2"
-              >SERVICE</a
-            >
-            <a
-              href="#work"
-              class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300 px-4 py-2"
-              >WORK</a
-            >
-            <a
-              href="#company"
-              class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300 px-4 py-2"
-              >COMPANY</a
-            >
-            <a
-              href="./member.html"
-              class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300 px-4 py-2"
-              >MEMBER</a
-            >
-            <a
-              href="./recruit.html"
-              class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300 px-4 py-2"
-              >RECRUIT</a
-            >
-            <a
-              href="./contact.html"
-              class="text-black text-base font-bold font-orbitron hover:text-[#f14e34] transition-colors duration-300 px-4 py-2"
-              >CONTACT</a
-            >
-          </nav>
-        </div>
       </header>
 
-      <!-- フッターサービスセクション -->
-      <div
-        class="fixed bottom-0 left-0 right-0 bg-[#1A1A1A] text-white py-3 shadow-lg z-50 bg-opacity-70"
-      >
-        <div class="container mx-auto px-4">
+      <!-- モバイルメニュー -->
+      <nav class="mobile-menu fixed inset-0 bg-primary z-50 mobile">
+        <!-- 閉じるボタン -->
+        <button
+          class="close-button absolute top-6 right-6 p-2 z-50"
+          id="close-button"
+          aria-label="閉じる"
+        >
           <div
-            class="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0"
+            class="w-12 h-12 bg-white rounded-full flex items-center justify-center"
           >
-            <div class="flex items-center gap-4 sm:gap-6 flex-1 justify-center">
-              <div class="relative w-24 sm:w-40 hidden md:block">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-primary"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </div>
+        </button>
+
+        <!-- メニューコンテンツ -->
+        <div class="h-full flex flex-col justify-center px-12">
+          <ul class="space-y-8">
+            <li>
+              <a
+                href="./index.html#top"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >TOP</a
+              >
+            </li>
+            <li>
+              <a
+                href="./index.html#service"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block relative group"
+              >
+                SERVICE
+                <div
+                  class="absolute -bottom-1 left-0 w-full h-0.5 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
+                ></div>
+              </a>
+            </li>
+            <li>
+              <a
+                href="./index.html#work"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >WORK</a
+              >
+            </li>
+            <li>
+              <a
+                href="./index.html#company"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >COMPANY</a
+              >
+            </li>
+            <li>
+              <a
+                href="./member.html"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >MEMBER</a
+              >
+            </li>
+            <li>
+              <a
+                href="./recruit.html"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >RECRUIT</a
+              >
+            </li>
+            <li>
+              <a
+                href="./contact.html"
+                class="text-white text-4xl font-orbitron hover:opacity-80 transition-opacity block"
+                >CONTACT</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- PCフッターサービスセクション -->
+      <div
+        id="footer-service-desktop"
+        class="fixed bottom-0 left-0 right-0 bg-[#1A1A1A] text-white py-3 shadow-lg z-40 bg-opacity-70 desktop"
+        style="transition: opacity 0.3s ease-out, visibility 0.3s ease-out"
+      >
+        <!-- PCバージョンのコンテンツ -->
+        <div class="container mx-auto px-4">
+          <div class="flex items-center justify-between relative">
+            <div class="flex items-center gap-6 flex-1">
+              <div class="relative w-40 hidden md:block">
                 <img
                   src="../images/besiness_men.png"
                   alt="ビジネスマンのイラスト"
-                  class="absolute -top-16 sm:-top-20 w-full sm:w-80 h-auto"
+                  class="absolute -top-20 w-80 h-auto"
                 />
               </div>
-              <div class="text-center">
-                <h2 class="text-sm sm:text-base md:text-lg font-medium">
-                  システムの不安・悩みごとを<br
-                    class="sm:hidden"
-                  />ヒアリングさせていただきます。
+              <div class="flex-1 text-center">
+                <h2 class="text-base md:text-lg font-medium">
+                  システムの不安・悩みごとを<br />ヒアリングさせていただきます。
                 </h2>
               </div>
             </div>
             <a
-              href="#contact"
-              class="bg-[#F14E34] hover:bg-[#F14E34]/90 text-white px-4 sm:px-6 py-2 rounded-lg flex items-center gap-2 transition-colors whitespace-nowrap text-sm sm:text-base font-medium"
+              href="./contact.html"
+              class="bg-[#F14E34] hover:bg-[#F14E34]/90 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors whitespace-nowrap text-base font-medium"
             >
               お問い合わせはこちら
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- モバイルフッターサービスセクション -->
+      <div
+        id="footer-service-mobile"
+        class="fixed bottom-0 left-0 right-0 bg-[#1A1A1A]/90 backdrop-blur-sm text-white py-4 z-40 mobile"
+        style="transition: opacity 0.3s ease-out, visibility 0.3s ease-out"
+      >
+        <div class="container mx-auto px-4">
+          <div class="flex flex-col items-center text-center space-y-4">
+            <p class="text-sm md:text-base">
+              システムの不安・悩みごとをヒアリングさせていただきます。
+            </p>
+            <a
+              href="#contact"
+              class="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg transition-colors"
+            >
+              <span class="text-sm md:text-base font-medium"
+                >お問い合わせはこちら</span
+              >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -217,20 +416,183 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="hidden sm:block"
               >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </a>
           </div>
         </div>
       </div>
 
+      <!-- メインビジュアル -->
+      <section
+        id="top"
+        class="pt-[120px] pb-16 lg:pt-[160px] lg:pb-24 relative overflow-hidden desktop"
+      >
+        <div class="container mx-auto px-4">
+          <div
+            class="flex flex-col lg:flex-row items-center justify-between relative z-10"
+          >
+            <div class="w-full lg:w-[45%] space-y-10">
+              <h1 class="text-center lg:text-left">
+                <span
+                  class="text-2xl lg:text-[36px] font-bold font-noto leading-relaxed tracking-wider"
+                >
+                  テクノロジーで<span class="text-[#f14e34]">思い</span>を<span
+                    class="text-[#f14e34]"
+                    >カタチ</span
+                  >に
+                </span>
+              </h1>
+
+              <img
+                src="../images/logo.png"
+                alt="モバイルアプリ開発"
+                class="w-full h-68 object-cover transition-transform duration-300"
+              />
+
+              <div class="space-y-6">
+                <div class="inline-flex">
+                  <div class="bg-[#f14e34] px-2 py-4 lg:py-2">
+                    <p
+                      class="text-white text-xl lg:text-2xl font-bold font-noto whitespace-nowrap"
+                    >
+                      Webアプリからシステム開発まで
+                    </p>
+                  </div>
+                </div>
+                <div class="inline-flex">
+                  <div class="bg-[#f14e34] px-2 py-4 lg:py-2">
+                    <p
+                      class="text-white text-xl lg:text-2xl font-bold font-noto whitespace-nowrap"
+                    >
+                      精鋭チームがトータルサポート
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 装飾要素 - アニメーション付き -->
+            <div class="hidden lg:block w-full lg:w-1/2 relative h-[600px]">
+              <!-- 大きな円 -->
+              <div
+                class="absolute top-0 right-0 w-[280px] h-[280px] bg-[#6d5291] rounded-full opacity-0 animate-fade-in"
+              ></div>
+
+              <!-- 小さな四角形 -->
+              <div
+                class="absolute top-[104px] left-[42px] w-16 h-16 bg-[#6d5291] rounded-xl transform rotate-12 opacity-0 animate-fade-in-delay-1"
+              ></div>
+
+              <!-- 枠付き四角形 -->
+              <div
+                class="absolute top-[480px] left-0 w-[100px] h-[100px] bg-white rounded-xl border-2 border-[#f14e34] transform -rotate-12 opacity-0 animate-fade-in-delay-2"
+              ></div>
+
+              <!-- 中サイズの円 -->
+              <div
+                class="absolute bottom-[80px] right-[60px] w-40 h-40 bg-[#3d8582] rounded-full opacity-0 animate-fade-in-delay-1"
+              ></div>
+
+              <!-- 回転する四角形 -->
+              <div
+                class="absolute top-[200px] right-[140px] w-28 h-28 bg-[#f14e34] rounded-xl transform rotate-45 opacity-0 animate-fade-in-delay-2 animate-spin-slow"
+              ></div>
+
+              <!-- 枠付き円 -->
+              <div
+                class="absolute bottom-[240px] left-[100px] w-24 h-24 border-4 border-[#6d5291] rounded-full opacity-0 animate-fade-in-delay-3"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 背景の装飾 -->
+        <div class="absolute top-0 left-0 w-full h-full -z-10">
+          <div
+            class="absolute top-[10%] left-[5%] w-8 h-8 bg-[#f14e34] opacity-0 animate-fade-in rounded-full"
+          ></div>
+          <div
+            class="absolute top-[30%] right-[15%] w-12 h-12 bg-[#6d5291] opacity-0 animate-fade-in-delay-1 rounded-xl"
+          ></div>
+          <div
+            class="absolute bottom-[20%] left-[20%] w-10 h-10 bg-[#3d8582] opacity-0 animate-fade-in-delay-2 rounded-full"
+          ></div>
+        </div>
+      </section>
+
+      <!-- メインビジュアル -->
+      <section class="pt-[120px] pb-16 relative overflow-hidden mobile">
+        <div class="container mx-auto px-4">
+          <div class="relative z-10">
+            <!-- 装飾的な図形 -->
+            <div
+              class="absolute -top-32 left-0 w-24 h-24 bg-teal rounded-full -translate-x-1/4"
+            ></div>
+            <div
+              class="absolute -top-20 right-8 w-8 h-8 rounded-full border-2 border-purple"
+            ></div>
+            <div
+              class="absolute -top-12 right-20 w-8 h-8 border-2 border-teal"
+            ></div>
+            <div
+              class="absolute -top-20 left-32 w-12 h-12 bg-coral rounded"
+            ></div>
+
+            <!-- メインコンテンツ -->
+            <div class="text-left mb-12 max-w-1xl ml-4 md:ml-8 lg:ml-12">
+              <h1 class="text-1xl md:text-3xl font-bold mb-8 mt-12">
+                テクノロジーで<span class="text-primary">思い</span>を<span
+                  class="text-primary"
+                  >カタチ</span
+                >に
+              </h1>
+
+              <!-- ロゴ -->
+              <div class="mb-8">
+                <img src="../images/header_log.png" alt="Codist" class="h-12" />
+              </div>
+
+              <!-- キャッチコピー -->
+              <div class="space-y-4 mt-8">
+                <div class="bg-primary inline-block px-2 py-2">
+                  <p
+                    class="text-white text-lg md:text-xl font-bold whitespace-nowrap"
+                  >
+                    Webアプリからシステム開発まで
+                  </p>
+                </div>
+                <div class="bg-primary inline-block px-2 py-2">
+                  <p
+                    class="text-white text-lg md:text-xl font-bold whitespace-nowrap"
+                  >
+                    精鋭チームがトータルサポート
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- 下部の図形 -->
+            <div
+              class="absolute top-60 right-0 w-24 h-24 bg-purple rounded-full translate-x-1/4"
+            ></div>
+            <div
+              class="absolute top-64 left-12 w-10 h-10 bg-coral transform rotate-45"
+            ></div>
+            <div
+              class="absolute top-64 right-24 w-8 h-8 border-2 border-teal rounded-full"
+            ></div>
+            <div
+              class="absolute button left-32 w-6 h-6 bg-teal transform rotate-45"
+            ></div>
+          </div>
+        </div>
+      </section>
+
       <!-- サービスセクション -->
       <section
         id="service"
-        class="mx-4 lg:mx-12 bg-[#F14E34] py-16 lg:py-24 relative overflow-hidden rounded-[20px]"
+        class="mx-4 lg:mx-12 bg-[#F14E34] py-16 lg:py-24 relative overflow-hidden rounded-[20px] scroll-fade desktop"
       >
         <div class="container mx-auto px-6 lg:px-12 relative z-10">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -253,7 +615,7 @@
                     Webアプリケーション開発を中心に、システム運用、DB設計・最適化、
                   </p>
                   <p class="text-base">
-                    守業務まで幅広いニーズに対応しています。
+                    保守業務まで幅広いニーズに対応しています。
                   </p>
                 </div>
               </div>
@@ -278,56 +640,58 @@
 
             <!-- 右側：3つの業務説明 -->
             <div class="space-y-6">
-              <!-- 受託開発・SESの業務 -->
+              <!-- 受託開発業務 -->
               <div
-                class="bg-white/95 p-8 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
+                class="bg-white/95 p-4 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
               >
                 <div class="flex items-start gap-4 mb-6">
                   <div class="w-4 h-4 rounded-full bg-[#F14E34] mt-2"></div>
                   <h4 class="text-[#F14E34] text-xl font-bold font-noto">
-                    受託開発・SESの業務
+                    受託開発業務
                   </h4>
                 </div>
                 <ul class="space-y-4 text-black font-bold">
-                  <li>・社内の業務支援システムの開発</li>
-                  <li>・スマートフォンアプリの開発</li>
+                  <li>・受託開発業務</li>
+                  <li>・既存システムの改修および更新</li>
                 </ul>
               </div>
 
-              <!-- システムの教育業務 -->
+              <!-- システムコンサルティング -->
               <div
-                class="bg-white/95 p-8 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
+                class="bg-white/95 p-4 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
               >
                 <div class="flex items-start gap-4 mb-6">
                   <div class="w-4 h-4 rounded-full bg-[#6D5291] mt-2"></div>
                   <h4 class="text-[#6D5291] text-xl font-bold font-noto">
-                    システムの教育業務
+                    システムコンサルティング
                   </h4>
                 </div>
                 <ul class="space-y-4 text-black font-bold">
-                  <li>・運用や保守のITリテラシー教育支援</li>
-                  <li>・社員のプログラミング教育支援</li>
+                  <li>・お客様の課題をヒアリングし、課題を解決</li>
+                  <li>・必要なシステムの最適化および構築</li>
                 </ul>
               </div>
 
-              <!-- DX支援業務 -->
+              <!-- アプリ開発 -->
               <div
                 class="bg-white/95 p-8 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
               >
                 <div class="flex items-start gap-4 mb-6">
                   <div class="w-4 h-4 rounded-full bg-[#3D8582] mt-2"></div>
                   <h4 class="text-[#3D8582] text-xl font-bold font-noto">
-                    DX支援業務
+                    アプリ開発
                   </h4>
                 </div>
                 <ul class="space-y-4 text-black font-bold">
-                  <li>・システム運用のスマート化</li>
-                  <li>・必要なシステムの選別・最適化</li>
+                  <li>・スマートフォンアプリの開発</li>
+                  <li>・自社アプリの開発</li>
                 </ul>
               </div>
             </div>
           </div>
-          <div class="absolute right-0 top-3/4 -translate-y-1/2 transform">
+          <div
+            class="absolute right-0 top-3/4 -translate-y-1/2 transform desktop"
+          >
             <img
               src="../images/besiness_men_2.png"
               alt="ビジネスマンのイラスト"
@@ -345,24 +709,143 @@
         ></div>
       </section>
 
+      <!-- サービスセクション モバイル用 -->
+      <section
+        id="service"
+        class="mx-4 lg:mx-12 bg-[#F14E34] py-16 lg:py-24 relative overflow-hidden rounded-[20px] scroll-fade mobile"
+      >
+        <div class="container mx-auto px-6 lg:px-12 relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- 左側：事業内容と画像 -->
+            <div class="space-y-8">
+              <div>
+                <h2
+                  class="text-white text-6xl lg:text-6xl font-medium font-orbitron mb-8"
+                >
+                  service
+                </h2>
+                <h3
+                  class="text-white text-xl lg:text-2xl font-bold font-noto mb-20"
+                >
+                  事業内容
+                </h3>
+
+                <div class="text-white text-base lg:text-lg mb-12">
+                  <p class="text-base">
+                    Webアプリケーション開発を中心に、システム運用、DB設計・最適化、
+                  </p>
+                  <p class="text-base">
+                    保守業務まで幅広いニーズに対応しています。
+                  </p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-6">
+                <div class="relative group overflow-hidden rounded-lg">
+                  <img
+                    src="../images/service_image_1.png"
+                    alt="モバイルアプリ開発"
+                    class="w-full h-68 object-cover transition-transform duration-300"
+                  />
+                </div>
+                <div class="relative group overflow-hidden rounded-lg">
+                  <img
+                    src="../images/service_image_2.png"
+                    alt="システムサポート"
+                    class="w-full h-68 object-cover transition-transform duration-300"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- 右側：3つの業務説明 -->
+            <div class="space-y-6">
+              <!-- 受託開発業務 -->
+              <div
+                class="bg-white/95 p-4 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
+              >
+                <div class="flex items-start gap-4 mb-6">
+                  <div class="w-4 h-4 rounded-full bg-[#F14E34] mt-2"></div>
+                  <h4 class="text-[#F14E34] text-xl font-bold font-noto">
+                    受託開発業務
+                  </h4>
+                </div>
+                <ul class="space-y-4 text-black font-bold">
+                  <li>・受託開発業務</li>
+                  <li>・既存システムの改修および更新</li>
+                </ul>
+              </div>
+
+              <!-- システムコンサルティング -->
+              <div
+                class="bg-white/95 p-4 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
+              >
+                <div class="flex items-start gap-4 mb-6">
+                  <div class="w-4 h-4 rounded-full bg-[#6D5291] mt-2"></div>
+                  <h4 class="text-[#6D5291] text-xl font-bold font-noto">
+                    システムコンサルティング
+                  </h4>
+                </div>
+                <ul class="space-y-4 text-black font-bold">
+                  <li>・お客様の課題をヒアリングし、課題を解決</li>
+                  <li>・必要なシステムの最適化および構築</li>
+                </ul>
+              </div>
+
+              <!-- アプリ開発 -->
+              <div
+                class="bg-white/95 p-8 rounded-[10px] hover:shadow-lg transition-shadow duration-300"
+              >
+                <div class="flex items-start gap-4 mb-6">
+                  <div class="w-4 h-4 rounded-full bg-[#3D8582] mt-2"></div>
+                  <h4 class="text-[#3D8582] text-xl font-bold font-noto">
+                    アプリ開発
+                  </h4>
+                </div>
+                <ul class="space-y-4 text-black font-bold">
+                  <li>・スマートフォンアプリの開発</li>
+                  <li>・自社アプリの開発</li>
+                </ul>
+              </div>
+
+              <div class="p-8 flex justify-center mobile">
+                <img
+                  src="../images/besiness_men_2.png"
+                  alt="ビジネスマンのイラスト"
+                  class="w-40 h-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 装飾的な背景要素 -->
+        <div
+          class="absolute top-0 right-0 w-[300px] h-[300px] bg-white opacity-5 rounded-full"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 w-[200px] h-[200px] bg-white opacity-5 rounded-full"
+        ></div>
+      </section>
+
       <!-- メリットセクション -->
-      <section class="py-16 lg:py-24 relative overflow-hidden">
+      <section class="py-16 lg:py-24 relative overflow-hidden scroll-fade">
         <div class="container mx-auto px-4">
           <!-- 装飾的なドット -->
           <div
-            class="absolute top-12 left-8 w-2 h-2 rounded-full bg-[#F14E34]"
+            class="absolute top-12 left-8 w-2 h-2 rounded-full bg-[#F14E34] animate-float"
           ></div>
           <div
-            class="absolute top-24 right-12 w-2 h-2 rounded-full bg-[#6D5291]"
+            class="absolute top-24 right-12 w-2 h-2 rounded-full bg-[#6D5291] animate-float-delay-1"
           ></div>
           <div
-            class="absolute bottom-12 left-1/4 w-2 h-2 rounded-full bg-[#3D8582]"
+            class="absolute bottom-12 left-1/4 w-2 h-2 rounded-full bg-[#3D8582] animate-float-delay-2"
           ></div>
           <div
-            class="absolute top-1/2 right-1/4 w-2 h-2 rounded-full bg-[#F14E34]"
+            class="absolute top-1/2 right-1/4 w-2 h-2 rounded-full bg-[#F14E34] animate-float"
           ></div>
           <div
-            class="absolute bottom-24 right-8 w-2 h-2 rounded-full bg-[#6D5291]"
+            class="absolute bottom-24 right-8 w-2 h-2 rounded-full bg-[#6D5291] animate-float-delay-1"
           ></div>
 
           <div class="text-center mb-16">
@@ -370,85 +853,47 @@
               merit
             </h2>
             <h3 class="text-xl lg:text-2xl font-bold font-noto">
-              Codistに依頼するメリット
+              codistに依頼するメリット
             </h3>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
             <!-- メリット1 -->
             <div class="flex flex-col items-center text-center">
-              <div class="w-32 h-32 mb-8">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#F14E34"
-                  stroke-width="1.5"
-                  class="w-full h-full"
-                >
-                  <path
-                    d="M17 8h.01M12 16a4 4 0 100-8 4 4 0 000 8z"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M9 18L15 18"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M10 22L14 22"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+              <div class="w-32 h-32">
+                <img
+                  src="../images/merit_1.png"
+                  alt="ビジネスマンのイラスト"
+                  class="w-60 h-auto"
+                />
               </div>
-              <div class="bg-[#F14E34] text-white p-4 mb-6 w-full">
-                <p class="text-xl font-bold font-noto">
-                  お客様と対話を重ねて<br />作り上げていきます
-                </p>
+              <div class="bg-[#F14E34] text-white mb-2 px-4">
+                <p class="text-xl font-bold font-noto">お客様と対話を重ねて</p>
+              </div>
+              <div class="bg-[#F14E34] text-white mb-2 px-4">
+                <p class="text-xl font-bold font-noto">作り上げていきます</p>
               </div>
               <p class="text-sm font-noto leading-relaxed">
                 対話を通してお客様の想いや課題を深く理解し、<br />
-                本当に必要な機能や設計をご提案しています。
+                本当に必要な機能や設計を提案いたします。
               </p>
             </div>
 
             <!-- メリット2 -->
             <div class="flex flex-col items-center text-center">
-              <div class="w-32 h-32 mb-8">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#6D5291"
-                  stroke-width="1.5"
-                  class="w-full h-full"
-                >
-                  <rect
-                    x="2"
-                    y="3"
-                    width="20"
-                    height="14"
-                    rx="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M8 21h8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M12 17v4"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+              <div class="w-32 h-32 ms-4">
+                <img
+                  src="../images/merit_2.png"
+                  alt="ビジネスマンのイラスト"
+                  class="w-60 h-auto"
+                />
               </div>
-              <div class="bg-[#6D5291] text-white p-4 mb-6 w-full">
+              <div class="bg-[#6D5291] text-white mb-2 px-4">
+                <p class="text-xl font-bold font-noto">高度なスキルで</p>
+              </div>
+              <div class="bg-[#6D5291] text-white mb-2 px-4">
                 <p class="text-xl font-bold font-noto">
-                  高度なスキルで<br />システム全般対応可能です
+                  システム全般対応可能です
                 </p>
               </div>
               <p class="text-sm font-noto leading-relaxed">
@@ -459,200 +904,218 @@
 
             <!-- メリット3 -->
             <div class="flex flex-col items-center text-center">
-              <div class="w-32 h-32 mb-8">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#3D8582"
-                  stroke-width="1.5"
-                  class="w-full h-full"
-                >
-                  <path
-                    d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+              <div class="w-32 h-32 mb-4">
+                <img
+                  src="../images/merit_3.png"
+                  alt="ビジネスマンのイラスト"
+                  class="w-60 h-auto"
+                />
               </div>
-              <div class="bg-[#3D8582] text-white p-4 mb-6 w-full">
+              <div class="bg-[#3D8582] text-white mb-2 px-4">
+                <p class="text-xl font-bold font-noto">プロの目線から</p>
+              </div>
+              <div class="bg-[#3D8582] text-white mb-2 px-4">
                 <p class="text-xl font-bold font-noto">
-                  プロの目線から<br />ガツガツ提案いたします
+                  ガツガツ提案いたします
                 </p>
               </div>
               <p class="text-sm font-noto leading-relaxed">
                 お客様の思いや考えを言語化し、<br />
-                具体的なシステムの形を積極的に提案させていただきます。
+                具体的なシステムの形を積極的に提案いたします。
               </p>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- 実績紹介スライダー -->
       <section
-        class="bg-[#3D8582] py-16 lg:py-24 rounded-[20px] mx-4 lg:mx-12 mt-12 relative overflow-hidden"
+        id="work"
+        class="bg-[#3D8582] py-16 lg:py-24 rounded-[20px] mx-4 lg:mx-12 mt-12 relative overflow-hidden scroll-fade desktop"
       >
         <div class="container mx-auto px-4">
-          <div class="flex flex-col">
-            <h2
-              class="text-white text-4xl lg:text-6xl font-medium font-orbitron mb-4"
-            >
-              work
-            </h2>
-            <h3 class="text-white text-xl lg:text-2xl font-bold font-noto mb-8">
-              実績紹介
-            </h3>
+          <div class="flex flex-col lg:flex-row lg:gap-12">
+            <!-- タイトル部分 -->
+            <div class="lg:w-1/3 mb-8 lg:mb-0">
+              <h2
+                class="text-white text-4xl lg:text-6xl font-medium font-orbitron mb-4"
+              >
+                work
+              </h2>
+              <h3
+                class="text-white text-xl lg:text-2xl font-bold font-noto mb-8"
+              >
+                実績紹介
+              </h3>
 
-            <p class="text-white text-base lg:text-lg mb-12">
-              これまで手がけてきたプロジェクトの中から、<br />
-              お客様に高く評価いただいた事例をご紹介します。
-            </p>
-
-            <!-- プロジェクトカード -->
-            <div class="relative overflow-hidden">
-              <div id="slide-container" class="relative min-h-[400px] flex">
-                <!-- スライド1 -->
-                <div class="work-slide active">
-                  <div class="bg-white rounded-lg p-6 lg:p-8 mb-8">
-                    <div class="flex flex-wrap gap-4 mb-6">
-                      <span
-                        class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
-                      >
-                        業種：製造業
-                      </span>
-                      <span
-                        class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
-                      >
-                        規模：社員30名程度
-                      </span>
-                    </div>
-
-                    <h4 class="text-xl lg:text-2xl font-bold mb-6">
-                      営業活動を効率化するフルスクラッチ顧客管理システムの開発
-                    </h4>
-
-                    <div class="bg-gray-100 p-6 rounded-lg mb-6">
-                      <div class="flex items-start gap-4">
-                        <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
-                        <p class="text-gray-700">
-                          属人的な営業管理や顧客データの分散管理が課題となっていました。
-                          既存システムが現場に合わなくなったこともあり、業務効率化と顧客情報の一元化をご希望されていました。
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="bg-[#FFEFEF] p-6 rounded-lg">
-                      <div class="flex items-start gap-4">
-                        <h5 class="font-bold min-w-[120px]">対応内容</h5>
-                        <p class="text-gray-700">
-                          まず、現場のヒアリングを通じて課題を整理し、経営層とも連携しながら提案を実施。
-                          営業進捗の可視化や提案書の管理機能など、現場ニーズに即したシステム設計を行いました。
-                          さらに、システム導入後の定着支援として、トレーニングやサポートも実施しました。
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- スライド2 -->
-                <div class="work-slide next">
-                  <div class="bg-white rounded-lg p-6 lg:p-8 mb-8">
-                    <div class="flex flex-wrap gap-4 mb-6">
-                      <span
-                        class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
-                      >
-                        業種：小売業
-                      </span>
-                      <span
-                        class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
-                      >
-                        規模：社員100名程度
-                      </span>
-                    </div>
-
-                    <h4 class="text-xl lg:text-2xl font-bold mb-6">
-                      在庫管理・発注業務の自動化システム構築
-                    </h4>
-
-                    <div class="bg-gray-100 p-6 rounded-lg mb-6">
-                      <div class="flex items-start gap-4">
-                        <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
-                        <p class="text-gray-700">
-                          手作業での在庫確認や発注作業に多くの時間を要し、人的ミスも発生していました。
-                          また、複数店舗の在庫状況をリアルタイムで把握できないことが経営課題となっていました。
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="bg-[#FFEFEF] p-6 rounded-lg">
-                      <div class="flex items-start gap-4">
-                        <h5 class="font-bold min-w-[120px]">対応内容</h5>
-                        <p class="text-gray-700">
-                          在庫数の自動監視と発注提案機能を実装し、さらに店舗間の在庫移動を最適化するアルゴリズムを開発。
-                          また、売上データと連携した需要予測機能により、より効率的な在庫管理を実現しました。
-                          導入後、発注業務の工数を70%削減することに成功しました。
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ナビゲーションボタン -->
-              <div class="flex justify-end gap-4">
-                <button
-                  onclick="prevSlide()"
-                  class="bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D8582]"
-                  aria-label="前のプロジェクト"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="m15 18-6-6 6-6" />
-                  </svg>
-                </button>
-                <button
-                  onclick="nextSlide()"
-                  class="bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D8582]"
-                  aria-label="次のプロジェクト"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
-                </button>
-              </div>
+              <p class="text-white text-base lg:text-lg">
+                これまで手がけてきたプロジェクトの中から、<br
+                  class="hidden lg:block"
+                />
+                お客様に高く評価いただいた事例をご紹介します。
+              </p>
             </div>
 
-            <!-- インジケーター -->
-            <div class="flex justify-center gap-2 mt-6">
-              <button
-                onclick="goToSlide(0)"
-                class="w-2 h-2 rounded-full bg-white transition-opacity"
-                aria-label="プロジェクト 1"
-              ></button>
-              <button
-                onclick="goToSlide(1)"
-                class="w-2 h-2 rounded-full bg-white/30 transition-opacity"
-                aria-label="プロジェクト 2"
-              ></button>
+            <!-- プロジェクトカード部分 -->
+            <div class="lg:w-2/3">
+              <div class="relative overflow-hidden">
+                <div id="slide-container" class="relative min-h-[400px] flex">
+                  <!-- スライド1 -->
+                  <div class="work-slide active w-full desktop">
+                    <div class="bg-white rounded-lg p-6 lg:p-8 mb-8">
+                      <div class="flex flex-wrap gap-4 mb-6">
+                        <span
+                          class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
+                        >
+                          業種：教育業
+                        </span>
+                        <span
+                          class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
+                        >
+                          規模：社員10名程度
+                        </span>
+                      </div>
+
+                      <h4 class="text-xl lg:text-2xl font-bold mb-6">
+                        生徒とのスケジュール管理システムの開発
+                      </h4>
+
+                      <div class="bg-gray-100 p-6 rounded-lg mb-6">
+                        <div class="flex items-start gap-4">
+                          <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
+                          <p class="text-gray-700">
+                            生徒との予定調整を電話やメールで行っており、時間と手間がかかっている状況。
+                            リアルタイムでのスケジュール調整と顧客情報の一元管理が求められていました。
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="relative h-6 w-full flex justify-center">
+                        <div
+                          class="absolute w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[12px] border-t-[#F14E34]"
+                        ></div>
+                      </div>
+
+                      <div class="bg-[#FFEFEF] p-6 rounded-lg">
+                        <div class="flex items-start gap-4">
+                          <h5 class="font-bold min-w-[120px]">対応内容</h5>
+                          <p class="text-gray-700">
+                            現場でのヒアリングを通じて課題を整理し、予定調整と顧客管理を一元化できるシステムを開発。<br />
+                            さらに、利便性向上のため決済機能を追加実装しました。<br />
+                            これにより、生徒との予定調整がスムーズになり、業務効率化と顧客拡大を実現しました。
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- スライド2 -->
+                  <div class="work-slide next w-full desktop">
+                    <div class="bg-white rounded-lg p-6 lg:p-8 mb-8">
+                      <div class="flex flex-wrap gap-4 mb-6">
+                        <span
+                          class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
+                        >
+                          業種：不動産業
+                        </span>
+                        <span
+                          class="bg-[#3D8582] text-white px-4 py-1 rounded-full text-sm"
+                        >
+                          規模：社員10名程度
+                        </span>
+                      </div>
+
+                      <h4 class="text-xl lg:text-2xl font-bold mb-6">
+                        不動産物件管理アプリ開発のコンサルティング
+                      </h4>
+
+                      <div class="bg-gray-100 p-6 rounded-lg mb-6">
+                        <div class="flex items-start gap-4">
+                          <h5 class="font-bold min-w-[120px]">お客様の状況</h5>
+                          <p class="text-gray-700">
+                            自社の不動産物件情報を効率的に管理するため、新規アプリケーション開発を計画。
+                            しかし、技術的な知識がなく、開発会社の選定にも苦労されておりました。
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="relative h-6 w-full flex justify-center">
+                        <div
+                          class="absolute w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[12px] border-t-[#F14E34]"
+                        ></div>
+                      </div>
+
+                      <div class="bg-[#FFEFEF] p-6 rounded-lg">
+                        <div class="flex items-start gap-4">
+                          <h5 class="font-bold min-w-[120px]">対応内容</h5>
+                          <p class="text-gray-700">
+                            お客様の要件に基づき、適切なプログラミング言語の選定を支援。<br />
+                            また、アプリケーションの稼働インフラに関する技術的助言しました。<br />
+                            さらに、開発をスムーズに進めるための検討ポイント整理し、要件に応じた適正費用を算出した。<br />
+                            結果として、お客様のニーズに合った開発パートナーの選定を実現しました。<br />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ナビゲーションボタン -->
+                <div class="flex justify-end gap-4">
+                  <button
+                    onclick="prevSlide()"
+                    class="bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D8582]"
+                    aria-label="前のプロジェクト"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m15 18-6-6 6-6" />
+                    </svg>
+                  </button>
+                  <button
+                    onclick="nextSlide()"
+                    class="bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D8582]"
+                    aria-label="次のプロジェクト"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- インジケーター -->
+              <div class="flex justify-center gap-2 mt-6">
+                <button
+                  onclick="goToSlide(0)"
+                  class="w-2 h-2 rounded-full bg-white transition-opacity"
+                  aria-label="プロジェクト 1"
+                ></button>
+                <button
+                  onclick="goToSlide(1)"
+                  class="w-2 h-2 rounded-full bg-white/30 transition-opacity"
+                  aria-label="プロジェクト 2"
+                ></button>
+              </div>
             </div>
           </div>
         </div>
@@ -666,8 +1129,208 @@
         ></div>
       </section>
 
+      <!-- 実績紹介スライダー モバイル -->
+      <section class="py-16 px-4 mobile scroll-fade" id="work">
+        <div class="container mx-auto">
+          <div class="bg-tertiary rounded-lg p-8 relative max-w-xl mx-auto">
+            <!-- タイトル -->
+            <div class="mb-8">
+              <h2 class="text-white text-2xl font-orbitron mb-2">WORK</h2>
+              <p class="text-white/90">実績紹介</p>
+              <p class="text-white/80 text-sm mt-4">
+                これまで手がけてきたプロジェクトの中から、お客様に広くお伝えしたい実績をご紹介します。
+              </p>
+            </div>
+
+            <!-- スライダー本体 -->
+            <div class="relative">
+              <div class="overflow-hidden">
+                <div class="flex relative">
+                  <!-- スライド1 -->
+                  <div class="work-slide active mobile w-full">
+                    <div class="space-y-8">
+                      <!-- プロジェクト概要 -->
+                      <div class="bg-white rounded-[20px] p-8">
+                        <!-- 業種・規模 -->
+                        <div class="flex flex-col gap-2">
+                          <div class="inline-flex items-center gap-2">
+                            <div
+                              class="bg-[#3D8582] text-white text-sm font-medium px-4"
+                            >
+                              業種
+                            </div>
+                            <span class="text-[#3D8582] text-sm"
+                              >教育業</span
+                            >
+                          </div>
+                          <div class="inline-flex items-center gap-2">
+                            <div
+                              class="bg-[#3D8582] text-white text-sm font-medium px-4"
+                            >
+                              規模
+                            </div>
+                            <span class="text-[#3D8582] text-sm"
+                              >社員10名程度</span
+                            >
+                          </div>
+                        </div>
+                        <h5 class="font-bold text-sm my-4">
+                          生徒とのスケジュール管理システムの開発
+                        </h5>
+                        <div class="space-y-8">
+                          <div class="bg-gray-50 rounded-[16px] p-6">
+                            <h4 class="text-gray-900 font-bold mb-4 border-b-2">
+                              お客様の状況
+                            </h4>
+                            <p class="text-gray-700 leading-relaxed">
+                              生徒との予定調整を電話やメールで行っており、時間と手間がかかっている状況。
+                              リアルタイムでのスケジュール調整と顧客情報の一元管理が求められていました。
+                            </p>
+                          </div>
+                          <div class="relative h-6 w-full flex justify-center">
+                            <div
+                              class="absolute w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[12px] border-t-[#F14E34]"
+                            ></div>
+                          </div>
+                          <div class="bg-[#FFF5F3] rounded-[16px] p-6">
+                            <h4 class="text-gray-900 font-bold mb-4 border-b-2">
+                              対応内容
+                            </h4>
+                            <p class="text-gray-700 leading-relaxed">
+                              現場でのヒアリングを通じて課題を整理し、予定調整と顧客管理を一元化できるシステムを開発。
+                              さらに、利便性向上のため決済機能を追加実装しました。
+                              これにより、生徒との予定調整がスムーズになり、業務効率化と顧客拡大を実現しました。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- スライド2 -->
+                  <div class="work-slide active mobile w-full">
+                    <div class="space-y-8">
+                      <!-- プロジェクト概要 -->
+                      <div class="bg-white rounded-[20px] p-8">
+                        <!-- 業種・規模 -->
+                        <div class="flex flex-col gap-2">
+                          <div class="inline-flex items-center gap-2">
+                            <div
+                              class="bg-[#3D8582] text-white text-sm font-medium px-4"
+                            >
+                              業種
+                            </div>
+                            <span class="text-[#3D8582] text-sm"
+                              >不動産業</span
+                            >
+                          </div>
+                          <div class="inline-flex items-center gap-2">
+                            <div
+                              class="bg-[#3D8582] text-white text-sm font-medium px-4"
+                            >
+                              規模
+                            </div>
+                            <span class="text-[#3D8582] text-sm"
+                              >社員10名程度</span
+                            >
+                          </div>
+                        </div>
+                        <h5 class="font-bold text-sm my-4">
+                          不動産物件管理アプリ開発のコンサルティング
+                        </h5>
+                        <div class="space-y-8">
+                          <div class="bg-gray-50 rounded-[16px] p-6">
+                            <h4 class="text-gray-900 font-bold mb-4 border-b-2">
+                              お客様の状況
+                            </h4>
+                            <p class="text-gray-700 leading-relaxed">
+                              自社の不動産物件情報を効率的に管理するため、新規アプリケーション開発を計画。
+                              しかし、技術的な知識がなく、開発会社の選定にも苦労されておりました。
+                            </p>
+                          </div>
+                          <div class="relative h-6 w-full flex justify-center">
+                            <div
+                              class="absolute w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[12px] border-t-[#F14E34]"
+                            ></div>
+                          </div>
+                          <div class="bg-[#FFF5F3] rounded-[16px] p-6">
+                            <h4 class="text-gray-900 font-bold mb-4 border-b-2">
+                              対応内容
+                            </h4>
+                            <p class="text-gray-700 leading-relaxed">
+                              お客様の要件に基づき、適切なプログラミング言語の選定を支援。
+                              また、アプリケーションの稼働インフラに関する技術的助言しました。
+                              さらに、開発をスムーズに進めるための検討ポイント整理し、要件に応じた適正費用を算出した。
+                              結果として、お客様のニーズに合った開発パートナーの選定を実現しました。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- スライダーコントロール -->
+              <div class="absolute inset-y-0 left-0 flex items-center h-96">
+                <button
+                  class="bg-white rounded-full p-2 shadow-lg transform -translate-x-1/2"
+                  onclick="prevSlide()"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M15 18l-6-6 6-6" />
+                  </svg>
+                </button>
+              </div>
+              <div class="absolute inset-y-0 right-0 flex items-center h-96">
+                <button
+                  class="bg-white rounded-full p-2 shadow-lg transform translate-x-1/2"
+                  onclick="nextSlide()"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- インジケーター -->
+              <div class="h-8 flex justify-center items-center space-x-2">
+                <button
+                  class="w-2 h-2 rounded-full bg-white transition-colors duration-200"
+                  onclick="goToSlide(0)"
+                ></button>
+                <button
+                  class="w-2 h-2 rounded-full bg-white/30 transition-colors duration-200"
+                  onclick="goToSlide(1)"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- リクルートセクション -->
-      <section class="py-16 lg:py-24 relative overflow-hidden">
+      <section class="py-16 lg:py-24 relative overflow-hidden scroll-fade">
         <div class="container mx-auto px-4">
           <div class="flex flex-col lg:flex-row gap-16">
             <!-- リクルート情報 -->
@@ -688,35 +1351,39 @@
                 </div>
 
                 <p class="text-base lg:text-lg mt-8">
-                  Codistでは毎日が「挑戦」と「成長」の連続です。<br />
-                  あなたのやりたいことを全力で応援いたします。
+                  codistでは毎日が「挑戦」と「成長」の連続です。<br />
+                  あなたの挑戦・成長を全力で応援いたします。
                 </p>
-
-                <a
-                  href="./recruit.html"
-                  class="inline-flex items-center text-lg font-bold mt-8 hover:text-[#F14E34] transition-colors"
-                >
-                  Read More
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="ml-2"
+                <div class="text-stert mt-12">
+                  <a
+                    href="./recruit.html"
+                    class="inline-flex items-center gap-6 group"
                   >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </a>
+                    <span
+                      class="inline-flex items-center border-b-2 border-b text-lg font-bold"
+                      >Read More</span
+                    >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="40"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="bg-[#F14E34] rounded-full p-3 group-hover:bg-[#F14E34]/90 transition-colors"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
 
             <!-- 会社情報 -->
-            <div class="w-full lg:w-1/2">
+            <div class="w-full lg:w-1/2" id="company">
               <h2 class="text-4xl lg:text-6xl font-medium font-orbitron mb-4">
                 company
               </h2>
@@ -735,7 +1402,7 @@
                 <div class="border-b border-gray-200 pb-4">
                   <div class="flex items-start">
                     <span class="font-bold min-w-[120px]">所在地</span>
-                    <span>530-0047 大阪府大阪市北区西天満6丁目4番地</span>
+                    <span>530-0002 大阪市北区曽根崎新地１丁目１３番２２号御堂筋フロントタワー</span>
                   </div>
                 </div>
 
@@ -757,9 +1424,9 @@
                   <div class="flex items-start">
                     <span class="font-bold min-w-[120px]">事業内容</span>
                     <div class="flex flex-col gap-2">
-                      <span>受託開発・SES事業</span>
-                      <span>システム関連教育事業</span>
-                      <span>DX支援・コンサルティング事業</span>
+                      <span>受託開発事業</span>
+                      <span>システムコンサルティング事業</span>
+                      <span>アプリ開発事業</span>
                     </div>
                   </div>
                 </div>
@@ -810,56 +1477,56 @@
       </section>
 
       <!-- フッター -->
-      <footer class="bg-[#1A1A1A] pt-40 pb-8 relative">
+      <footer class="bg-[#1A1A1A] pt-40 pb-8 relative" id="footer">
         <div class="container mx-auto px-4">
           <!-- ナビゲーション -->
           <nav class="flex justify-center mb-16">
             <ul class="flex flex-wrap justify-center gap-8 lg:gap-12">
               <li>
                 <a
-                  href="#top"
+                  href="./index.html#top"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >TOP</a
                 >
               </li>
               <li>
                 <a
-                  href="#service"
+                  href="./index.html#service"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >SERVICE</a
                 >
               </li>
               <li>
                 <a
-                  href="#work"
+                  href="./index.html#work"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >WORK</a
                 >
               </li>
               <li>
                 <a
-                  href="#company"
+                  href="./index.html#company"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >COMPANY</a
                 >
               </li>
               <li>
                 <a
-                  href="#member"
+                  href="./member.html"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >MEMBER</a
                 >
               </li>
               <li>
                 <a
-                  href="#recruit"
+                  href="./recruit.html"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >RECRUIT</a
                 >
               </li>
               <li>
                 <a
-                  href="#contact"
+                  href="./contact.html"
                   class="text-white hover:text-[#F14E34] transition-colors"
                   >CONTACT</a
                 >
@@ -872,21 +1539,21 @@
             <ul class="flex flex-wrap justify-center gap-8">
               <li>
                 <a
-                  href="#privacy"
+                  href="privacy_policy.html"
                   class="text-sm text-white hover:text-[#F14E34] transition-colors"
                   >プライバシーポリシー</a
                 >
               </li>
               <li>
                 <a
-                  href="#quality"
+                  href="./qurlity.html"
                   class="text-sm text-white hover:text-[#F14E34] transition-colors"
                   >品質について</a
                 >
               </li>
               <li>
                 <a
-                  href="#security"
+                  href="./security.html"
                   class="text-sm text-white hover:text-[#F14E34] transition-colors"
                   >情報セキュリティについて</a
                 >
@@ -903,37 +1570,244 @@
                 class="h-12 mx-auto"
               />
             </div>
-            <p class="text-sm text-white">&copy; Codist Co., Ltd.</p>
+            <p class="text-sm text-white">&copy; codist Co., Ltd.</p>
           </div>
         </div>
       </footer>
-
-      <!-- 残りのコンテンツは同じ -->
     </div>
 
     <script>
-      // モバイルメニューの制御
-      const mobileMenuButton = document.getElementById("mobile-menu-button");
-      const mobileMenu = document.getElementById("mobile-menu");
+      // デバイスタイプの判定
+      const isMobile = window.innerWidth < 768;
 
-      mobileMenuButton.addEventListener("click", () => {
-        mobileMenu.classList.toggle("active");
+      let currentSlide = 0;
+      const slides = isMobile
+        ? document.querySelectorAll(".work-slide.mobile")
+        : document.querySelectorAll(".work-slide.desktop");
+      const indicators = document.querySelectorAll(
+        ".flex.justify-center button"
+      );
+
+      function updateSlides() {
+        if (isMobile) {
+          // モバイル用のスライド処理
+          slides.forEach((slide, index) => {
+            slide.classList.remove("active", "next", "prev");
+            if (index === currentSlide) {
+              slide.classList.add("active");
+            } else if (index > currentSlide) {
+              slide.classList.add("next");
+            } else {
+              slide.classList.add("prev");
+            }
+          });
+        } else {
+          // デスクトップ用のスライド処理
+          slides.forEach((slide, index) => {
+            slide.classList.remove("active", "next", "prev");
+            if (index === currentSlide) {
+              slide.classList.add("active");
+              slide.style.transform = "translateX(0)";
+            } else if (index > currentSlide) {
+              slide.classList.add("next");
+              slide.style.transform = "translateX(100%)";
+            } else {
+              slide.classList.add("prev");
+              slide.style.transform = "translateX(-100%)";
+            }
+          });
+        }
+
+        // インジケーターの更新
+        indicators.forEach((indicator, index) => {
+          indicator.classList.toggle("bg-white", index === currentSlide);
+          indicator.classList.toggle("bg-white/30", index !== currentSlide);
+        });
+      }
+
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateSlides();
+      }
+
+      function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        updateSlides();
+      }
+
+      function goToSlide(index) {
+        currentSlide = index;
+        updateSlides();
+      }
+
+      // ウィンドウリサイズ時の処理
+      window.addEventListener("resize", () => {
+        const newIsMobile = window.innerWidth < 768;
+        if (newIsMobile !== isMobile) {
+          location.reload(); // デバイスタイプが変更された場合はページをリロード
+        }
       });
 
-      // メニューリンクをクリックしたらメニューを閉じる
-      document.querySelectorAll("#mobile-menu a").forEach((link) => {
-        link.addEventListener("click", () => {
-          mobileMenu.classList.remove("active");
+      // 初期表示
+      updateSlides();
+
+      // スムーズスクロールの実装
+      document.addEventListener("DOMContentLoaded", () => {
+        // スムーズスクロール処理
+        const normalizePath = (path) => {
+          return path.replace(/^\.\//, "").split("/").pop() || "";
+        };
+
+        // デバイスタイプを判定する関数
+        const isMobile = () => {
+          return window.innerWidth <= 768; // モバイルの判定基準を768px以下に設定
+        };
+
+        // スムーズスクロール処理
+        const handleSmoothScroll = (e) => {
+          const target = e.target.closest('a[href*="#"]');
+          if (!target) return;
+
+          const href = target.getAttribute("href");
+          if (!href) return;
+
+          const currentPath = normalizePath(window.location.pathname);
+          const targetPath = normalizePath(href.split("#")[0] || "");
+          const targetHash = "#" + href.split("#")[1];
+
+          if (
+            !targetPath ||
+            targetPath === currentPath ||
+            targetPath === "index.html"
+          ) {
+            // モバイルとデスクトップで適切なセクションを取得
+            const mobile = isMobile();
+            const targetSelector = `${targetHash}${
+              mobile ? ".mobile" : ".desktop"
+            }`;
+            const targetElement =
+              document.querySelector(targetSelector) ||
+              document.querySelector(targetHash);
+
+            if (!targetElement) return;
+
+            e.preventDefault();
+
+            // ヘッダーの高さを取得
+            const header = document.querySelector("header");
+            const headerHeight = header
+              ? header.offsetHeight
+              : mobile
+              ? 60
+              : 80; // モバイルとデスクトップでデフォルト値を変更
+
+            // 現在のビューポートでの要素の位置を取得
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition =
+              elementPosition + window.pageYOffset - headerHeight;
+
+            // スムーズスクロールを実行
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth",
+            });
+          }
+        };
+
+        // イベント委譲を使用してすべてのスクロールリンクを処理
+        document.addEventListener("click", handleSmoothScroll);
+
+        // モバイルメニューのトグル処理
+        const toggleMobileMenu = () => {
+          const mobileMenu = document.querySelector(".mobile-menu");
+          if (mobileMenu) {
+            mobileMenu.classList.toggle("open");
+          }
+        };
+
+        // モバイルメニューボタンのイベントリスナー
+        const mobileMenuButton = document.querySelector(".mobile-menu-button");
+        if (mobileMenuButton) {
+          mobileMenuButton.addEventListener("click", toggleMobileMenu);
+        }
+
+        // モバイルメニューリンクをクリックした時の処理
+        const mobileMenuLinks = document.querySelectorAll(
+          '.mobile-menu a[href*="#"]'
+        );
+        mobileMenuLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            handleSmoothScroll(e);
+            toggleMobileMenu();
+          });
+        });
+
+        // ウィンドウリサイズ時の処理
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            // リサイズ後にスクロール位置を調整する必要がある場合の処理をここに追加
+          }, 100);
         });
       });
+    </script>
 
-      // 画面外クリックでメニューを閉じる
-      document.addEventListener("click", (e) => {
-        if (
-          !mobileMenu.contains(e.target) &&
-          !mobileMenuButton.contains(e.target)
-        ) {
-          mobileMenu.classList.remove("active");
+    <script>
+      const menuButton = document.getElementById("menu-button");
+      const closeButton = document.getElementById("close-button");
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const header = document.getElementById("header");
+      const body = document.body;
+
+      function openMenu() {
+        mobileMenu.classList.add("active");
+        body.classList.add("overflow-hidden");
+        header.style.transform = "translateY(-100%)";
+      }
+
+      function closeMenu() {
+        mobileMenu.classList.remove("active");
+        body.classList.remove("overflow-hidden");
+        header.style.transform = "translateY(0)";
+      }
+
+      menuButton.addEventListener("click", openMenu);
+      closeButton.addEventListener("click", closeMenu);
+
+      // メニューリンクをクリックしたらメニューを閉じる
+      document.querySelectorAll(".mobile-menu a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const footer = document.getElementById("footer");
+        const footerServiceDesktop = document.getElementById(
+          "footer-service-desktop"
+        );
+        const footerServiceMobile = document.getElementById(
+          "footer-service-mobile"
+        );
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                footerServiceDesktop?.classList.add("fade-out");
+                footerServiceMobile?.classList.add("fade-out");
+              } else {
+                footerServiceDesktop?.classList.remove("fade-out");
+                footerServiceMobile?.classList.remove("fade-out");
+              }
+            });
+          },
+          {
+            threshold: 0.1, // フッターの10%が見えたら発火
+          }
+        );
+
+        if (footer) {
+          observer.observe(footer);
         }
       });
     </script>
