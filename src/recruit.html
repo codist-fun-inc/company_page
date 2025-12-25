@@ -4,6 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>codist</title>
+    <meta name="description" content="株式会社codistの採用情報ページです。エンジニアを募集しています。最高のチームの一員として一緒に成長しましょう。">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://codist.fun/recruit.html">
+
+    <!-- OGP -->
+    <meta property="og:title" content="採用情報・エンジニア募集｜株式会社codist">
+    <meta property="og:description" content="エンジニアを募集しています。最高のチームの一員として一緒に成長しましょう。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://codist.fun/recruit.html">
+    <meta property="og:image" content="https://codist.fun/images/logo.png">
+    <meta property="og:site_name" content="株式会社codist">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="採用情報・エンジニア募集｜株式会社codist">
+    <meta name="twitter:description" content="エンジニアを募集しています。最高のチームの一員として一緒に成長しましょう。">
+    <meta name="twitter:image" content="https://codist.fun/images/logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/images/favicon/site.webmanifest">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Orbitron:wght@400;500;700&display=swap"
@@ -13,6 +40,18 @@
     <script src="js/tailwind.js" defer></script>
     <script src="js/menu.js" defer></script>
     <link rel="stylesheet" href="css/style.css" />
+
+    <!-- 構造化データ: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "HOME", "item": "https://codist.fun/"},
+        {"@type": "ListItem", "position": 2, "name": "採用情報", "item": "https://codist.fun/recruit.html"}
+      ]
+    }
+    </script>
   </head>
   <body>
     <div class="min-h-screen bg-white">
@@ -27,7 +66,7 @@
               <div class="w-[180px]">
                 <!-- ロゴ -->
                 <img
-                  src="../images/header_log.png"
+                  src="./images/header_log.png"
                   alt="Codist"
                   class="h-[32px]"
                 />
@@ -115,7 +154,7 @@
             <div class="flex items-center justify-between h-full">
               <div class="w-[120px]">
                 <img
-                  src="../images/header_log.png"
+                  src="./images/header_log.png"
                   alt="Codist"
                   class="h-[24px]"
                 />
@@ -231,7 +270,7 @@
                 RECRUIT
               </h2>
               <img
-                src="../images/recruit_header.png"
+                src="./images/recruit_header.png"
                 alt=""
                 class="w-28 h-28"
               />
@@ -667,7 +706,7 @@
           <div class="text-center">
             <div class="mb-6">
               <img
-                src="../images/footer_log.png"
+                src="./images/footer_log.png"
                 alt="Codist"
                 class="h-12 mx-auto"
               />
