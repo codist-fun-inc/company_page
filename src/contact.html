@@ -299,7 +299,10 @@
                   </p>
                 </div>
 
-                <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSe_ImPUnrdf2roCx2JBYGYEPpw0y_cm8Z7y2bVYTFrskFWJWA/formResponse" method="POST" target="_self" id="contact-form-desktop" class="space-y-6">
+                <form id="contact-form-desktop" class="space-y-6">
+                  <!-- Honeypot field (スパム対策・非表示) -->
+                  <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" />
+
                   <!-- お問い合わせ種別 -->
                   <div class="grid grid-cols-[200px_1fr] items-start gap-8">
                     <label class="flex items-center gap-2 whitespace-nowrap pt-3">
@@ -308,11 +311,11 @@
                     </label>
                     <div class="flex gap-8">
                       <label class="flex items-center gap-2">
-                        <input type="radio" name="entry.230326707" value="お仕事のご依頼" class="text-[#F14E34] focus:ring-[#F14E34]" checked />
+                        <input type="radio" name="type" value="business" class="text-[#F14E34] focus:ring-[#F14E34]" checked />
                         <span>お仕事のご依頼</span>
                       </label>
                       <label class="flex items-center gap-2">
-                        <input type="radio" name="entry.230326707" value="エントリー" class="text-[#F14E34] focus:ring-[#F14E34]" />
+                        <input type="radio" name="type" value="entry" class="text-[#F14E34] focus:ring-[#F14E34]" />
                         <span>エントリー</span>
                       </label>
                     </div>
@@ -324,7 +327,7 @@
                       お名前
                       <span class="bg-[#F14E34] text-white text-xs px-2 py-0.5 rounded">必須</span>
                     </label>
-                    <input type="text" name="entry.731623761" placeholder="例）山田 太郎" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500" required />
+                    <input type="text" name="name" placeholder="例）山田 太郎" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500" required />
                   </div>
 
                   <!-- 電話番号 -->
@@ -332,7 +335,7 @@
                     <label class="flex items-center gap-2 whitespace-nowrap pt-3">
                       電話番号
                     </label>
-                    <input type="tel" name="entry.108141932" placeholder="例）000-1234-5678" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500" />
+                    <input type="tel" name="phone" placeholder="例）000-1234-5678" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500" />
                   </div>
 
                   <!-- メールアドレス -->
@@ -341,7 +344,7 @@
                       メールアドレス
                       <span class="bg-[#F14E34] text-white text-xs px-2 py-0.5 rounded">必須</span>
                     </label>
-                    <input type="email" name="entry.1056215106" placeholder="例）helpdesk@codist.fun" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500" required />
+                    <input type="email" name="email" placeholder="例）helpdesk@codist.fun" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500" required />
                   </div>
 
                   <!-- 会社名 -->
@@ -349,7 +352,7 @@
                     <label class="flex items-center gap-2 whitespace-nowrap pt-3">
                       会社名
                     </label>
-                    <input type="text" name="entry.946042311" placeholder="例）株式会社codist" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500" />
+                    <input type="text" name="company" placeholder="例）株式会社codist" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500" />
                   </div>
 
                   <!-- お問い合わせ内容 -->
@@ -358,13 +361,8 @@
                       お問い合わせ内容
                       <span class="bg-[#F14E34] text-white text-xs px-2 py-0.5 rounded">必須</span>
                     </label>
-                    <textarea name="entry.1926310205" placeholder="お問い合わせ内容をご入力してください" rows="5" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500 min-h-[150px]" required></textarea>
+                    <textarea name="message" placeholder="お問い合わせ内容をご入力してください" rows="5" class="w-full px-4 py-3 rounded bg-white/95 text-gray-900 placeholder-gray-500 min-h-[150px]" required></textarea>
                   </div>
-
-                  <input type="hidden" name="fvv" value="1">
-                  <input type="hidden" name="pageHistory" value="0">
-                  <input type="hidden" name="fbzx" value="-1892603719814760951">
-                  <input type="hidden" name="partialResponse" value="[null,null,&quot;-1892603719814760951&quot;]">
 
                   <div class="flex justify-center gap-4 mt-8">
                     <button type="submit" class="px-12 py-4 bg-[#F14E34] text-white text-lg rounded-lg hover:opacity-80 transition-opacity flex items-center gap-2">
@@ -399,6 +397,9 @@
 
                 <!-- フォーム -->
                 <form id="contact-form-mobile" class="space-y-8">
+                  <!-- Honeypot field (スパム対策・非表示) -->
+                  <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" />
+
                   <!-- お問い合わせ種別 -->
                   <div class="space-y-4">
                     <label class="block font-bold">
@@ -442,6 +443,7 @@
                     </label>
                     <input
                       type="text"
+                      name="name"
                       placeholder="例）山田 太郎"
                       class="w-full px-4 py-3 rounded-lg bg-white/95 text-gray-900 placeholder-gray-500"
                       required
@@ -455,6 +457,7 @@
                     </label>
                     <input
                       type="tel"
+                      name="phone"
                       placeholder="例）000-1234-5678"
                       class="w-full px-4 py-3 rounded-lg bg-white/95 text-gray-900 placeholder-gray-500"
                     />
@@ -471,6 +474,7 @@
                     </label>
                     <input
                       type="email"
+                      name="email"
                       placeholder="例）helpdesk@codist.fun"
                       class="w-full px-4 py-3 rounded-lg bg-white/95 text-gray-900 placeholder-gray-500"
                       required
@@ -497,6 +501,7 @@
                       >
                     </label>
                     <textarea
+                      name="message"
                       rows="6"
                       placeholder="お問い合わせ内容をご入力してください"
                       class="w-full px-4 py-3 rounded-lg bg-white/95 text-gray-900 placeholder-gray-500 resize-none"

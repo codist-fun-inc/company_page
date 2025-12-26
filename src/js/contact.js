@@ -4,22 +4,41 @@ document.addEventListener('DOMContentLoaded', function() {
     forms.forEach(form => {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const submitButton = form.querySelector('button[type="submit"]');
             const originalButtonContent = submitButton.innerHTML;
             submitButton.disabled = true;
             submitButton.innerHTML = '送信中...';
 
             try {
-                // Google Formsに送信
-                await fetch(form.action, {
+                // フォームデータを取得
+                const formData = {
+                    type: form.querySelector('[name="type"]:checked')?.value || '',
+                    name: form.querySelector('[name="name"]')?.value || '',
+                    phone: form.querySelector('[name="phone"]')?.value || '',
+                    email: form.querySelector('[name="email"]')?.value || '',
+                    company: form.querySelector('[name="company"]')?.value || '',
+                    message: form.querySelector('[name="message"]')?.value || '',
+                    website: form.querySelector('[name="website"]')?.value || '' // honeypot
+                };
+
+                // Netlify Functions に送信
+                const response = await fetch('/.netlify/functions/contact', {
                     method: 'POST',
-                    mode: 'no-cors',
-                    body: new FormData(form)
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
                 });
 
-                alert('お問い合わせを受け付けました。担当者からご連絡させていただきます。');
-                form.reset();
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('お問い合わせを受け付けました。担当者からご連絡させていただきます。');
+                    form.reset();
+                } else {
+                    throw new Error(result.message || 'エラーが発生しました');
+                }
             } catch (error) {
                 console.error('Error:', error);
                 alert('エラーが発生しました。もう一度お試しください。');
@@ -31,36 +50,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// URLパラメータに基づいてラジオボタンを自動選択
 document.addEventListener('DOMContentLoaded', function() {
-    // URLからtype parameterを取得
     const urlParams = new URLSearchParams(window.location.search);
     const type = urlParams.get('type');
 
     if (type === 'entry') {
-        // デスクトップ版のラジオボタン
-        const desktopEntryRadio = document.querySelector('#contact-form-desktop input[value="エントリー"]');
-        if (desktopEntryRadio) {
-            desktopEntryRadio.checked = true;
-        }
-
-        // モバイル版のラジオボタン
-        const mobileEntryRadio = document.querySelector('#contact-form-mobile input[value="entry"]');
-        if (mobileEntryRadio) {
-            mobileEntryRadio.checked = true;
-        }
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    // URLからtype parameterを取得
-    const urlParams = new URLSearchParams(window.location.search);
-    const type = urlParams.get('type');
-
-    if (type === 'work') {
-        // お仕事のご依頼のラジオボタンを探して選択
-        const workRadio = document.querySelector('input[name="entry.230326707"][value="お仕事のご依頼"]');
-        if (workRadio) {
-            workRadio.checked = true;
-        }
+        // エントリーのラジオボタンを選択
+        const entryRadios = document.querySelectorAll('input[name="type"][value="entry"]');
+        entryRadios.forEach(radio => {
+            radio.checked = true;
+        });
+    } else if (type === 'work' || type === 'business') {
+        // お仕事のご依頼のラジオボタンを選択
+        const businessRadios = document.querySelectorAll('input[name="type"][value="business"]');
+        businessRadios.forEach(radio => {
+            radio.checked = true;
+        });
     }
 });

@@ -1,0 +1,42 @@
+# Netlify 設定ファイル
+
+[build]
+  # 公開ディレクトリ
+  publish = "src"
+  # Functions ディレクトリ
+  functions = "netlify/functions"
+
+[functions]
+  # Node.js バンドラー
+  node_bundler = "esbuild"
+
+# カスタム404ページ
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# セキュリティヘッダー
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# 静的アセットのキャッシュ設定
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
