@@ -1,6 +1,10 @@
 # Local Netlify folder
 .netlify
 
+# Claude Code settings
+CLAUDE.md
+.claude/
+
 # Environment variables
 .env
 .DS_Store
