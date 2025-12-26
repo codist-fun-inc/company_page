@@ -52,12 +52,22 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     },
     {
-      threshold: 0.2,
+      threshold: 0.1,
     }
   );
 
   document.querySelectorAll(".scroll-fade").forEach((el) => {
-    el.style.opacity = "0";
-    observer.observe(el);
+    // 要素がすでにビューポート内にあるかチェック
+    const rect = el.getBoundingClientRect();
+    const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+
+    if (isInViewport) {
+      // すでにビューポート内にある場合は即座にアニメーションクラスを追加
+      el.classList.add("animate-fade-in");
+    } else {
+      // ビューポート外の場合はopacityを0にしてobserve
+      el.style.opacity = "0";
+      observer.observe(el);
+    }
   });
 });
